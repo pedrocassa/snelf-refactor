@@ -1,4 +1,3 @@
-
 FROM python:3.9
 
 WORKDIR /code
@@ -9,7 +8,7 @@ RUN pip3 install -v --no-cache-dir --upgrade -r /code/requirements.txt
 
 RUN pip3 install fasttext_win
 
-COPY ./snelf-backend /code/snelf-backend
+COPY . /code/snelf-backend
 
 WORKDIR /code/snelf-backend
 

@@ -1,0 +1,46 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  snelf-postgres:
+    image: "postgres:14-alpine"
+    container_name: snelf-postgres
+    volumes:
+      - snelf-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      POSTGRES_DB: testejp
+      POSTGRES_USER: testejp
+      POSTGRES_PASSWORD: testejp
+
+  snelf-back:
+    build: ./snelf-container/snelf-backend
+    container_name: snelf-back
+    environment:
+      - DB_SERVER=snelf-postgres
+      - POSTGRES_DB=kanban
+      - POSTGRES_USER=kanban
+      - POSTGRES_PASSWORD=kanban
+    ports:
+      - 8000:8000
+    links:
+      - snelf-postgres
+
+  snelf-front:
+    build: ./snelf-frontend
+    container_name: snelf-front
+    ports:
+      - 3001:3000
+    links:
+      - snelf-back
+
+
+volumes:
+  snelf-data:
+  
+# networks:
+#   default:
+#     name: snelf

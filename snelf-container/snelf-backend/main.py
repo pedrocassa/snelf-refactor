@@ -37,3 +37,7 @@ async def importarCsv(csvFile: UploadFile = File(...)):
         return {"filename": csvFile.filename, "status":"Arquivo recebido na API de importação"}
     else:
         raise HTTPException(status_code=422, detail="Formato de arquivo não suportado")
+
+@app.get("/teste")
+async def root():
+    return "Teste executado com sucesso."
