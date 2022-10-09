@@ -5,11 +5,11 @@ import ListaDeCompras from "./resultado/ListaDeCompras";
 import DadosDoPreco from "./resultado/DadosDoPreco";
 import GraficoBoxPlot from "./resultado/GraficoBoxplot";
 
-//import dados mock dipirona
+// import dados mock dipirona
 import dadosProdutos from "../DADOS_REAIS_MOCK.json";
 var dadosMock = Object.keys(dadosProdutos).map((key) => dadosProdutos[key]);
 
-//função que retorna a página a ser exibida na tela, tendo como base a opção selecionada na barra superior
+// função que retorna a página a ser exibida na tela, tendo como base a opção selecionada na barra superior
 export function getResultPage(
   selectedPageId,
   dataset,

@@ -2,8 +2,15 @@ import { Box, Button, Grid, TextField, Typography } from '@mui/material'
 import React from 'react'
 import Navbar from '../components/navbar/Navbar'
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function Busca() {
+    const [search, setSearch] = useState({});
+
+    function handleChange(e) {
+        setSearch({...search, [e.target.name]: e.target.value});
+    }
+
     return (
         <div>
             <Navbar />

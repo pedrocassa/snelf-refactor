@@ -1,16 +1,16 @@
 FROM python:3.9
 
-WORKDIR /code
+WORKDIR /back_app
 
-COPY ./requirements.txt /code/requirements.txt
+COPY ./requirements.txt /back_app/requirements.txt
 
-RUN pip3 install -v --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip3 install -v --no-cache-dir --upgrade -r /back_app/requirements.txt
 
 RUN pip3 install fasttext_win
 
-COPY . /code/snelf-backend
+COPY . /back_app/
 
-WORKDIR /code/snelf-backend
+# WORKDIR /code/snelf-backend
 
 EXPOSE 8000
 

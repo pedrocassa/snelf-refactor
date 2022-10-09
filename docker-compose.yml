@@ -2,9 +2,8 @@
 version: '3.1'
 
 services:
-
   snelf-postgres:
-    image: "postgres:14-alpine"
+    image: postgres:14-alpine
     container_name: snelf-postgres
     volumes:
       - snelf-data:/var/lib/postgresql/data
@@ -21,21 +20,31 @@ services:
     container_name: snelf-back
     environment:
       - DB_SERVER=snelf-postgres
-      - POSTGRES_DB=kanban
-      - POSTGRES_USER=kanban
-      - POSTGRES_PASSWORD=kanban
+      - POSTGRES_DB=testejp
+      - POSTGRES_USER=testejp
+      - POSTGRES_PASSWORD=testejp
+    volumes:
+      - ./snelf-container/snelf-backend:/back_app
     ports:
       - 8000:8000
-    links:
+    depends_on:
       - snelf-postgres
 
   snelf-front:
     build: ./snelf-frontend
     container_name: snelf-front
+    stdin_open: true
+    # Mount our host directory to the docker container
+    # Mount (.) current directory to the docker container code/snelf-frontend
+    # Reflect file changes from host to container
+    volumes:
+      - ./snelf-frontend:/front_app
+      - /front_app/node_modules
     ports:
       - 3001:3000
-    links:
+    depends_on:
       - snelf-back
+    command: npm run start
 
 
 volumes:
@@ -43,4 +52,4 @@ volumes:
   
 # networks:
 #   default:
-#     name: snelf
+#     name: snelf-network

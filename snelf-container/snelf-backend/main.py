@@ -41,3 +41,7 @@ async def importarCsv(csvFile: UploadFile = File(...)):
 @app.get("/teste")
 async def root():
     return "Teste executado com sucesso."
+
+@app.get("/teste2")
+async def root():
+    return "Teste 2 executado com sucesso."
