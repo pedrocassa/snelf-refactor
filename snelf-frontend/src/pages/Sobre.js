@@ -28,12 +28,6 @@ export default function Sobre() {
                             </Typography>
                         </Box>
 
-                        <Box p={2} pb={2} textAlign="center">
-                            <Typography variant="h8">
-                            Desenvolvido pelos alunos Filipe Shanom Xavier e Pedro Joaquim
-                            </Typography>
-                        </Box>
-
                         <Grid item>
                             <Button component={Link} to="/" variant="contained">
                                 Voltar

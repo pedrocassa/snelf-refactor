@@ -3,13 +3,18 @@ from fastapi import FastAPI, File, UploadFile
 from starlette.middleware.cors import CORSMiddleware
 from pre_processamento import inicia_pre_processamento
 import fasttext 
+from importar_csv_para_sql import insert_medicine, insert_transactions
+import pdb
 
 
 app = FastAPI()
 
 #burlando cors
 origins = [
-    "http://127.0.0.1:3000"
+    "http://localhost",
+    "http://localhost:3001",
+    "http://localhost:3001/importarMedicamento",
+    "http://localhost:3001/importarTransacao"
 ]
 
 app.add_middleware(
@@ -30,7 +35,7 @@ async def root():
 async def importarCsv(csvFile: UploadFile = File(...)):
     if csvFile.filename.endswith('.csv'):
         #modifica o csv para formato que é aceito no treinamento
-        #cleaned_dataset = clean_dataset(csvFile)
+        # cleaned_dataset = clean_dataset(csvFile)
         #aqui seria a chamada para a api do modelo, iniciando o pré processamento
         await inicia_pre_processamento(csvFile)
         fasttext.supervised('dados/data.train.txt','modelo/modelo')
@@ -38,10 +43,23 @@ async def importarCsv(csvFile: UploadFile = File(...)):
     else:
         raise HTTPException(status_code=422, detail="Formato de arquivo não suportado")
 
+# rota de importação do csv. estudando como fazer para upload em csv maior
+@app.post("/importarMedicamentos")
+async def importarMedicamentos(csvFile: UploadFile = File(...)):
+    if csvFile.filename.endswith('.csv'):
+        insert_medicine(csvFile)
+        return {"filename": csvFile.filename, "status":"Arquivo importado com sucesso."}
+    else:
+        raise HTTPException(status_code=422, detail="Formato de arquivo não suportado")
+
 @app.get("/teste")
 async def root():
     return "Teste executado com sucesso."
 
-@app.get("/teste2")
-async def root():
-    return "Teste 2 executado com sucesso."
+@app.post("/importarTransacoes")
+async def importarTransacoes(csvFile: UploadFile = File(...)):
+    if csvFile.filename.endswith('.csv'):
+        insert_transactions(csvFile)
+        return {"filename": csvFile.filename, "status":"Arquivo importado com sucesso."}
+    else:
+        raise HTTPException(status_code=422, detail="Formato de arquivo não suportado")

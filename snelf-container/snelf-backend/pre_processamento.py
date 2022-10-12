@@ -16,13 +16,16 @@ from lib.extractor1 import Extractor as xtc
 #data_file = 'produtos_farmaceuticos.csv'
 
 async def inicia_pre_processamento(csvFile):
-    cols = ['DescricaoProduto','CLEAN']
+    # print('CSV File:')
+    # print(csvFile)
+    # print(csvFile.file)
+    cols = ["description","ean"]
     
     data_path = './dados/'
     if not os.path.exists(data_path) :
         os.mkdir(data_path)
 
-    df = pd.read_csv(csvFile.file, usecols=cols, dtype={0:str, 1:int})
+    df = pd.read_csv(csvFile.file, usecols=cols, dtype={0:str, 1:str}, sep='|')
     print(df.head())
     #df = pd.read_csv(content, usecols=cols, dtype={0:str, 1:int})
  

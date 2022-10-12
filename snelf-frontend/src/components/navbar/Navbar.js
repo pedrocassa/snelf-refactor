@@ -15,7 +15,7 @@ export default function Navbar() {
                     <BotaoMenu />
                     <Typography variant="h6" sx={{ flexGrow: 1 }}>
                         <Link to="/" className='text-link'>
-                            SNELF
+                            Snelf
                         </Link>
                     </Typography>
                 </Toolbar>

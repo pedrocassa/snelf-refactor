@@ -18,7 +18,7 @@ export default function Home() {
                     >
                         <Box pt={5} pb={1} textAlign="center">
                             <Typography variant="h3">
-                                Bem-vindo ao SNELF!
+                                SNELF
                             </Typography>
                         </Box>
 
@@ -29,8 +29,8 @@ export default function Home() {
                         </Box>
 
                         <Grid item>
-                            <Button component={Link} to="/importacao" variant="contained">
-                                Iniciar
+                            <Button component={Link} to="/busca" variant="contained">
+                                Buscar Produto
                             </Button>
                         </Grid>
                     </Grid>
