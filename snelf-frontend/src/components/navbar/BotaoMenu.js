@@ -44,6 +44,7 @@ export default function BotaoMenu() {
       >
         <MenuItem component={Link} to={'/importacaoMedicamento'} onClick={handleClose}><ImportExportIcon className='iconeMenu' />Importar Base de Medicamentos</MenuItem>
         <MenuItem component={Link} to={'/importacaoTransacao'} onClick={handleClose}><ImportExportIcon className='iconeMenu' />Importar Base de Transações</MenuItem>
+        <MenuItem component={Link} to={'/treinamentoModelo'} onClick={handleClose}><ImportExportIcon className='iconeMenu' />Atualizar Treinamento do Modelo</MenuItem>
         <MenuItem component={Link} to={'/busca'} onClick={handleClose}><SearchIcon className='iconeMenu' />Buscar Produtos</MenuItem>
         <MenuItem component={Link} to={'/sobre'} onClick={handleClose}><InfoIcon className='iconeMenu' />Sobre o Projeto</MenuItem>
 

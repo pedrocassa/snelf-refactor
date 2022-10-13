@@ -5,6 +5,7 @@ from pre_processamento import inicia_pre_processamento
 import fasttext 
 from importar_csv_para_sql import insert_medicine, insert_transactions
 import pdb
+from testesJP import testagem
 
 
 app = FastAPI()
@@ -42,6 +43,16 @@ async def importarCsv(csvFile: UploadFile = File(...)):
         return {"filename": csvFile.filename, "status":"Arquivo recebido na API de importação"}
     else:
         raise HTTPException(status_code=422, detail="Formato de arquivo não suportado")
+
+@app.post("/treinarModelo")
+async def treinamentoModelo():
+    try:
+        await inicia_pre_processamento()
+        fasttext.supervised('dados/data.train.txt','modelo/modelo')
+        return {"status":"Treinamento do modelo realizado com sucesso."}
+    except:
+        raise HTTPException(status_code=422, detail="Modelo não pôde ser treinado.")
+
 
 # rota de importação do csv. estudando como fazer para upload em csv maior
 @app.post("/importarMedicamentos")

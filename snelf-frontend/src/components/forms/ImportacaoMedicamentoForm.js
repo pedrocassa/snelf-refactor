@@ -8,6 +8,7 @@ export default function ImportacaoMedicamentoForm() {
     const [csvFile, setCsvFile] = React.useState();
     const [filename, setFilename] = React.useState("");
     const [resultMessage, setResultMessage] = React.useState();
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const handleChange = (e) => {
         if (e.target.files.length) {
