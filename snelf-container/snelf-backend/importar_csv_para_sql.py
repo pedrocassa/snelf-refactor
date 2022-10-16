@@ -99,7 +99,6 @@ def insert_transactions(csvFile):
     # args = ','.join(cursor.mogrify(f"({iterative_string})", i).decode('utf-8')
     #             for i in inputArray)
     args = ','.join(f"{i}" for i in inputArray)
-            
     
     sql = "INSERT INTO medicine_transactions(CodigoNFe,DataEmissao,MunicipioEmitente,unidadecomercial,quantidadecomercial,valorunitariocomercial,DescricaoProduto,CLEAN) VALUES "
     cursor.execute(sql + (args))
@@ -122,6 +121,55 @@ def get_all_medicine_df():
     connection.close()
     
     return medicine_dataframe
+
+def fill_classes_table():
+    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="localhost", port="5432")
+    connection.autocommit=True
+    cursor = connection.cursor()
+    
+    inputArray = []
+    
+    class_label = ['class_label']
+    class_data = []
+    
+    training_file = open('./dados/data.train.txt', 'r')
+    training_lines = training_file.readlines()
+        
+    for line in training_lines:
+        inputArray.append((str(line.split()[0])))
+        # line.replace('__label__3298 CIPROFIBRATO 100MG COMPR C30 MEDLEY'.split()[0])
+        
+    inputArray = list(set(inputArray))
+    
+    args = ','.join(f"('{i}')" for i in inputArray)
+    sql = "INSERT INTO classes(class_label) VALUES "    
+    cursor.execute(sql + (args))
+    
+    connection.commit()
+    connection.close()
+
+
+def fill_products_classes_table():
+    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="localhost", port="5432")
+    connection.autocommit=True
+    cursor = connection.cursor()
+    
+    inputArray = []
+    training_file = open('./dados/data.train.txt', 'r')
+    training_lines = training_file.readlines()
+    for line in training_lines:
+        inputArray.append((str(line.split()[0]), str(line.replace(line.split()[0] + ' ', '').replace('\n',''))))
+        
+    inputArray = list(set(inputArray))
+    
+    sql = "select insert_in_products_classes_table"
+    for input in inputArray:
+        arg = str(input)
+        print(sql + arg)
+        cursor.execute(sql + arg)
+
+    connection.commit()
+    connection.close()
 
 
 def get_all_medicine_expanded_df():
