@@ -35,7 +35,7 @@ export function getResultPage(
   }
 }
 
-export default function Resultado() {
+export default function Resultado(props) {
   //variável que controla a barra de seleção, e consequentemente qual página está sendo exibida
   const [selectedPageId, setSelectedPageId] = React.useState(1);
   const selectPageById = (event, newSelectedPageId) => {

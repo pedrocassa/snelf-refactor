@@ -1,15 +1,47 @@
-import { Box, Button, Grid, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Grid, TextField, Typography } from '@mui/material'
 import React from 'react'
 import Navbar from '../components/navbar/Navbar'
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
-export default function Busca() {
-    const [search, setSearch] = useState({});
 
-    function handleChange(e) {
-        setSearch({...search, [e.target.name]: e.target.value});
-    }
+const CONSULTA_ENDPOINT = `http://localhost:8000/consultarGrupo`;
+
+export default function Busca() {
+    const [search, setSearch] = useState('');
+    const [result, setResult] = useState([]);
+    const [resultMessage, setResultMessage] = React.useState();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        let formData = new FormData();
+        formData.append("stringBusca", search);
+        await fetch(CONSULTA_ENDPOINT, {
+            method: "POST",
+            body: search,
+        })
+        .then(r => r.json().then(data => ({ status: r.status, body: data })))
+        .then(responseData => {
+            setResult([]);
+            console.log(responseData.body);
+
+            for (const key in responseData.body) {
+                let transacao = responseData[key].name.toLowerCase();
+                setResult(previousResult => {
+                    return [...previousResult, responseData[key]]
+                });
+            }
+
+
+            if(responseData.status===200){
+                setResultMessage(<Alert variant='filled' severity='success' onClose={() => {setResultMessage()}}>Consulta realizada com sucesso: Grupo - {responseData.body}.</Alert>);
+            }else{
+                setResultMessage(<Alert variant='filled' severity='error' onClose={() => {setResultMessage()}}>Ocorreu um erro na consulta. Código {responseData.status}</Alert>);
+            }
+        }).catch(error => {
+            console.log(error);
+        });
+    };
 
     return (
         <div>
@@ -35,13 +67,11 @@ export default function Busca() {
                             </Typography>
                         </Box>
 
-                        <TextField fullWidth label="Insira o nome do produto" id="fullWidth" />
-
-
+                        <TextField onChange={(event) => setSearch(event.target.value)} fullWidth label="Insira o nome do produto" id="fullWidth" />
 
                         <Box pt={7}>
                             <Grid item>
-                                <Button component={Link} to="/resultado" variant="contained">
+                                <Button component="label" type="submit" onClick={handleSubmit} variant="contained">
                                     Buscar
                                 </Button>
                             </Grid>
