@@ -137,7 +137,6 @@ def fill_classes_table():
         
     for line in training_lines:
         inputArray.append((str(line.split()[0])))
-        # line.replace('__label__3298 CIPROFIBRATO 100MG COMPR C30 MEDLEY'.split()[0])
         
     inputArray = list(set(inputArray))
     
@@ -186,6 +185,50 @@ def get_all_medicine_expanded_df():
     connection.close()
     
     return medicine_transactions_dataframe
+
+def get_medicines_from_label(label):
+    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
+    connection.autocommit=True
+    cursor = connection.cursor()
+    sql_table_creation = f"""select t.*
+                            from products_classes pc
+                            join classes c 
+                                on c.id=pc.id_classe
+                                and c.class_label like '%{label}%'
+                            join products_transactions pt 
+                                on pt.id_product=pc.id_produto
+                            join transactions t
+                                on t.id=pt.id_transaction"""
+
+    cursor.execute(sql_table_creation)
+
+    medicine_transactions_consulted = cursor.fetchall()
+    
+    # [(1363, 701198, datetime.date(2018, 10, 13), 'N/I', 'AP', 105.0, 10.0, 'NEOCAINA 0,5% PES.10X4M (BUPIV+GLICOS)', '8902344419178')]
+    
+    print('medicine_transactions_consulted')
+    print(medicine_transactions_consulted)
+    
+    medicines_object = []
+    for transaction in medicine_transactions_consulted:
+        medicines_object.append({
+            'codigoNfe': transaction[1],
+            'dataEmissao': transaction[2],
+            'municipioEmitente': transaction[3],
+            'unidadeComercial': transaction[4],
+            'quantidadeComercial': transaction[5],
+            'valorUnitarioComercial': transaction[6],
+            'descricaoProduto': transaction[7],
+            'clean': transaction[8]
+        })
+
+    print('medicines_object')
+    print(medicines_object)
+
+    connection.commit()
+    connection.close()
+    
+    return medicines_object
 
 
 # Path('my_data.db').touch()

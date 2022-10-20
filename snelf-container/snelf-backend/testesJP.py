@@ -52,4 +52,11 @@ from matplotlib.pyplot import text
 
 # fill_classes_table()
 # get_all_medicine_df()
-fill_products_classes_table()
+# fill_products_classes_table()
+
+# model = fasttext.supervised('dados/data.train.txt','modelo/modelo')
+model = fasttext.train_supervised('dados/data.train.txt')
+teste = model.predict('DEXAMETASONA', k=1)
+# teste = model.predict_proba('Teste',k=1)
+
+print(teste)

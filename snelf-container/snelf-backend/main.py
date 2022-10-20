@@ -4,7 +4,7 @@ from starlette.middleware.cors import CORSMiddleware
 # from fastapi.middleware.cors import CORSMiddleware
 from pre_processamento import inicia_pre_processamento
 import fasttext 
-from importar_csv_para_sql import insert_medicine, insert_transactions
+from importar_csv_para_sql import insert_medicine, insert_transactions, get_medicines_from_label
 import pdb
 # from testesJP import testagem
 
@@ -62,13 +62,13 @@ async def consultaGrupo(busca: str = Body(...)):
     try:
         #from fastText.python.fasttext_module.fasttext.FastText import _FastText as fasttext
         model = fasttext.supervised('dados/data.train.txt','modelo/modelo')
-        teste = model.predict_proba([busca],k=3)
-        print (teste)
+        label = model.predict_proba([busca],k=1)[0][0][0]
+        
+        # Consultar a partir do retornado
+        transactions = get_medicines_from_label(label)
+        
+        return { 'medicines': transactions }
 
-        # model = fasttext.train_supervised('dados/data.train.txt')
-        # texto = [stringBusca]
-        # teste = model.predict(texto)
-        # print (teste)
     except Exception as e:
         print(e)
         raise HTTPException(status_code=422, detail="Consulta não pôde ser realizada.")

@@ -3,6 +3,7 @@ import React from 'react'
 import Navbar from '../components/navbar/Navbar'
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import Resultado from './Resultado';
 
 
 const CONSULTA_ENDPOINT = `http://localhost:8000/consultarGrupo`;
@@ -20,41 +21,35 @@ export default function Busca() {
             method: "POST",
             body: search,
         })
-        .then(r => r.json().then(data => ({ status: r.status, body: data })))
-        .then(responseData => {
-            setResult([]);
-            console.log(responseData.body);
+            .then(r => r.json().then(data => ({ status: r.status, body: data })))
+            .then(responseData => {
+                console.log(responseData.body);
 
-            for (const key in responseData.body) {
-                let transacao = responseData[key].name.toLowerCase();
-                setResult(previousResult => {
-                    return [...previousResult, responseData[key]]
-                });
-            }
+                setResult(responseData.body.medicines);
+
+                for (const key in responseData.body) {
+                    let transacao = responseData[key].name.toLowerCase();
+                    setResult(previousResult => {
+                        return [...previousResult, responseData[key]]
+                    });
+                }
 
 
-            if(responseData.status===200){
-                setResultMessage(<Alert variant='filled' severity='success' onClose={() => {setResultMessage()}}>Consulta realizada com sucesso: Grupo - {responseData.body}.</Alert>);
-            }else{
-                setResultMessage(<Alert variant='filled' severity='error' onClose={() => {setResultMessage()}}>Ocorreu um erro na consulta. Código {responseData.status}</Alert>);
-            }
-        }).catch(error => {
-            console.log(error);
-        });
+                if (responseData.status === 200) {
+                    setResultMessage(<Alert variant='filled' severity='success' onClose={() => { setResultMessage() }}>Consulta realizada com sucesso: Grupo - {responseData.body}.</Alert>);
+                } else {
+                    setResultMessage(<Alert variant='filled' severity='error' onClose={() => { setResultMessage() }}>Ocorreu um erro na consulta. Código {responseData.status}</Alert>);
+                }
+            }).catch(error => {
+                console.log(error);
+            });
     };
 
     return (
         <div>
             <Navbar />
-            <Box p={{ xs: 8, sm: 6, md: 9 }} height='80vh' width='80vh' m="auto">
+            <Box p={{ xs: 8, sm: 6, md: 9 }} height='80vh' width='90%' m="auto">
                 <Box pb={5}>
-                    <Grid
-                        container
-                        spacing={0}
-                        direction="column"
-                        rowSpacing={1}
-                        alignItems="center"
-                    >
                         <Box pt={5} pb={1} textAlign="center">
                             <Typography variant="h3">
                                 Busca
@@ -70,14 +65,16 @@ export default function Busca() {
                         <TextField onChange={(event) => setSearch(event.target.value)} fullWidth label="Insira o nome do produto" id="fullWidth" />
 
                         <Box pt={7}>
-                            <Grid item>
+                            <Grid style={{textAlign: "-webkit-center"}} item>
                                 <Button component="label" type="submit" onClick={handleSubmit} variant="contained">
                                     Buscar
                                 </Button>
                             </Grid>
                         </Box>
 
-                    </Grid>
+
+                        <Resultado />
+
                 </Box>
             </Box>
         </div>

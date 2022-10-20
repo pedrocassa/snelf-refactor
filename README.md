@@ -37,6 +37,3 @@ No diretório raiz `snelf-frontend`, instale as dependências com o comando `npm
 Inicie a aplicação com `npm start`
 
 Após isso basta utilizar a aplicação.
-
-
-Teste
