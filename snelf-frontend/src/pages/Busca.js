@@ -13,6 +13,12 @@ export default function Busca() {
     const [result, setResult] = useState([]);
     const [resultMessage, setResultMessage] = React.useState();
 
+    
+    // const passResults = (resultado) => {
+    //     setResult(resultado);
+    //     console.log(`Resultado: ${result}`);
+    // }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         let formData = new FormData();
@@ -23,17 +29,21 @@ export default function Busca() {
         })
             .then(r => r.json().then(data => ({ status: r.status, body: data })))
             .then(responseData => {
-                console.log(responseData.body);
+                console.log(responseData.body.medicines);
 
+                // passResults(responseData.body.medicines);
+
+                // responseData.body.medicines.forEach(medicine => {
+                //     console.log(medicine);
+                //     debugger;
+                //     setResult(previousResult => {
+                //         return result.append(medicine)
+                //     });
+                // });
+                
+                
                 setResult(responseData.body.medicines);
-
-                for (const key in responseData.body) {
-                    let transacao = responseData[key].name.toLowerCase();
-                    setResult(previousResult => {
-                        return [...previousResult, responseData[key]]
-                    });
-                }
-
+                console.log(`result: ${result}`);
 
                 if (responseData.status === 200) {
                     setResultMessage(<Alert variant='filled' severity='success' onClose={() => { setResultMessage() }}>Consulta realizada com sucesso: Grupo - {responseData.body}.</Alert>);
@@ -44,6 +54,7 @@ export default function Busca() {
                 console.log(error);
             });
     };
+
 
     return (
         <div>
@@ -66,14 +77,13 @@ export default function Busca() {
 
                         <Box pt={7}>
                             <Grid style={{textAlign: "-webkit-center"}} item>
-                                <Button component="label" type="submit" onClick={handleSubmit} variant="contained">
+                                <Button component="label" type="submit" onClick={handleSubmit} disabled={search == ''} variant="contained">
                                     Buscar
                                 </Button>
                             </Grid>
                         </Box>
 
-
-                        <Resultado />
+                        { result.length != 0 ? <Resultado resultados={result} /> : <div></div> }
 
                 </Box>
             </Box>

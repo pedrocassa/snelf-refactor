@@ -204,22 +204,18 @@ def get_medicines_from_label(label):
 
     medicine_transactions_consulted = cursor.fetchall()
     
-    # [(1363, 701198, datetime.date(2018, 10, 13), 'N/I', 'AP', 105.0, 10.0, 'NEOCAINA 0,5% PES.10X4M (BUPIV+GLICOS)', '8902344419178')]
-    
-    print('medicine_transactions_consulted')
-    print(medicine_transactions_consulted)
-    
     medicines_object = []
     for transaction in medicine_transactions_consulted:
         medicines_object.append({
-            'codigoNfe': transaction[1],
-            'dataEmissao': transaction[2],
-            'municipioEmitente': transaction[3],
-            'unidadeComercial': transaction[4],
-            'quantidadeComercial': transaction[5],
-            'valorUnitarioComercial': transaction[6],
-            'descricaoProduto': transaction[7],
-            'clean': transaction[8]
+            'id': transaction[0],
+            'CodigoNFe': transaction[1],
+            'DataEmissao': transaction[2],
+            'MunicipioEmitente': transaction[3],
+            'unidadecomercial': transaction[4],
+            'quantidadecomercial': transaction[5],
+            'valornitariocomercial': transaction[6],
+            'DescricaoProduto': transaction[7],
+            'CLEAN': transaction[8]
         })
 
     print('medicines_object')

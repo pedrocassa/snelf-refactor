@@ -8,7 +8,7 @@ import GraficoBoxPlot from "./resultado/GraficoBoxplot";
 // import dados mock dipirona
 import dadosProdutos from "../DADOS_REAIS_MOCK.json";
 // var dadosMock = Object.keys(dadosProdutos).map((key) => dadosProdutos[key]);
-var dadosMock = [];
+var dados = [];
 
 // função que retorna a página a ser exibida na tela, tendo como base a opção selecionada na barra superior
 export function getResultPage(selectedPageId,dataset,setDataset,selectDataset) {
@@ -31,7 +31,7 @@ export function getResultPage(selectedPageId,dataset,setDataset,selectDataset) {
   }
 }
 
-export default function Resultado(props) {
+export default function Resultado({ resultados }) {
   //variável que controla a barra de seleção, e consequentemente qual página está sendo exibida
   const [resultado, setResultado] = React.useState("");
   const [selectedPageId, setSelectedPageId] = React.useState(1);
@@ -39,8 +39,13 @@ export default function Resultado(props) {
     setSelectedPageId(newSelectedPageId);
   };
 
+  debugger;
+  console.log(`resultados: ${resultados}`);
+  dados = resultados != null ? Object.keys(resultados).map((key) => resultados[key]) : [];
   //variável que controla o dataset para exclusão de registros
-  const [dataset, setDataset] = React.useState(dadosMock);
+
+  console.log(`dados: ${dados}`)
+  const [dataset, setDataset] = React.useState(dados);
   const selectDataset = (event, newDataset) => {
     setDataset(newDataset);
     console.log(newDataset);
