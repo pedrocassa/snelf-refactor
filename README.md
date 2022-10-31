@@ -10,30 +10,20 @@ O SNELF foi desenvolvido utilizando arquitetura REST, utilizando o framework Pyt
 
 ## Como utilizar?
 
-### 1. Subir o SNELF Container
+### 1. Rodar o docker-compose do SNELF:
 
-#### Requerimentos
-Instalar `Docker 20>= , Python 3.9>=`
+#### Instalar o docker
 
-#### Execução
-Rodar o script `sobeDocker.sh` como administrador.
-O container subirá no endereço 0.0.0.0 com a porta 8000 exposta.
+#### Instalar o docker-compose
 
-#### Alternativa
-Buildar o docker:
-`sudo docker build -t snelf-backend-image -f Dockerfile .`
+#### Iniciar o docker
+sudo service docker start
 
-Rodar o container
-`sudo docker run -p 8000:8000 --rm --name snelf-container snelf-backend-image`
+#### Realizar o build do docker compose:
+docker-compose build
 
+#### Iniciar o docker compose:
+docker-compose start
 
-### 2. Subir o SNELF Front End
-Instalar `node 16.15>=`
-
-Para testar a aplicação, clone o repositório.
-
-No diretório raiz `snelf-frontend`, instale as dependências com o comando `npm install`
-
-Inicie a aplicação com `npm start`
-
-Após isso basta utilizar a aplicação.
+#### Parar o docker compose:
+Para parar o container, basta rodar o comando 'docker-compose stop'
