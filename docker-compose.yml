@@ -1,0 +1,55 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+  snelf-postgres:
+    image: postgres:14-alpine
+    container_name: snelf-postgres
+    volumes:
+      - snelf-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      POSTGRES_DB: testejp
+      POSTGRES_USER: testejp
+      POSTGRES_PASSWORD: testejp
+
+  snelf-back:
+    build: ./snelf-container/snelf-backend
+    container_name: snelf-back
+    environment:
+      - DB_SERVER=snelf-postgres
+      - POSTGRES_DB=testejp
+      - POSTGRES_USER=testejp
+      - POSTGRES_PASSWORD=testejp
+    volumes:
+      - ./snelf-container/snelf-backend:/back_app
+    ports:
+      - 8000:8000
+    depends_on:
+      - snelf-postgres
+
+  snelf-front:
+    build: ./snelf-frontend
+    container_name: snelf-front
+    stdin_open: true
+    # Mount our host directory to the docker container
+    # Mount (.) current directory to the docker container code/snelf-frontend
+    # Reflect file changes from host to container
+    volumes:
+      - ./snelf-frontend:/front_app
+      - /front_app/node_modules
+    ports:
+      - 3001:3000
+    depends_on:
+      - snelf-back
+    command: npm run start
+
+
+volumes:
+  snelf-data:
+  
+# networks:
+#   default:
+#     name: snelf-network

@@ -1,10 +1,15 @@
-INFO:root:[2022-06-27T16:13:54.230738] Log started. Log file: data_augmentation_medicamentos_None.log
-INFO:root:[2022-06-27T16:13:54.242602] Data loaded.
-INFO:root:[2022-06-27T16:13:54.242971] Target file created.
-INFO:root:[2022-06-27T16:13:54.243106] Initialized variables.
-INFO:root:[2022-06-27T16:13:54.243171] Process started.
-INFO:root:[2022-06-29T15:49:35.070802] Log started. Log file: data_augmentation_medicamentos_None.log
-INFO:root:[2022-06-29T15:49:35.079862] Data loaded.
-INFO:root:[2022-06-29T15:49:35.080165] Target file created.
-INFO:root:[2022-06-29T15:49:35.080270] Initialized variables.
-INFO:root:[2022-06-29T15:49:35.080350] Process started.
+INFO:root:[2022-10-13T00:57:17.428370] 1200 rows processed.
+INFO:root:[2022-10-13T01:01:45.661149] 1300 rows processed.
+INFO:root:[2022-10-13T22:04:22.175679] Log started. Log file: data_augmentation_medicamentos_None.log
+INFO:root:[2022-10-13T22:04:22.185616] Data loaded.
+INFO:root:[2022-10-13T22:04:22.187320] Target file created.
+INFO:root:[2022-10-13T22:04:22.187542] Initialized variables.
+INFO:root:[2022-10-13T22:04:22.187662] Process started.
+INFO:root:[2022-10-13T22:07:17.145958] 100 rows processed.
+INFO:root:[2022-10-13T22:10:03.029537] 200 rows processed.
+INFO:root:[2022-10-13T22:12:54.683936] 300 rows processed.
+INFO:root:[2022-10-13T22:15:45.169785] 400 rows processed.
+INFO:root:[2022-10-13T22:19:08.160854] 500 rows processed.
+INFO:root:[2022-10-13T22:23:31.424578] 600 rows processed.
+INFO:root:[2022-10-13T22:27:55.639942] 700 rows processed.
+INFO:root:[2022-10-13T22:32:14.666604] 800 rows processed.

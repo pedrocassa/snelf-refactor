@@ -10,20 +10,24 @@ import time
 from imblearn.over_sampling import RandomOverSampler
 from sklearn.model_selection import train_test_split
 from lib.extractor1 import Extractor as xtc
+from importar_csv_para_sql import get_all_medicine_df, get_all_medicine_expanded_df
 
 #Carrega dados
 #data_path = '../datasets/medicamentos/'
 #data_file = 'produtos_farmaceuticos.csv'
 
-async def inicia_pre_processamento(csvFile):
+async def inicia_pre_processamento():
     cols = ['DescricaoProduto','CLEAN']
     
     data_path = './dados/'
     if not os.path.exists(data_path) :
         os.mkdir(data_path)
 
-    df = pd.read_csv(csvFile.file, usecols=cols, dtype={0:str, 1:int})
-    print(df.head())
+
+    df = get_all_medicine_expanded_df()
+    
+    # df = pd.read_csv(csvFile.file, usecols=cols, dtype={0:str, 1:int})
+    # print(df.head())
     #df = pd.read_csv(content, usecols=cols, dtype={0:str, 1:int})
  
     
@@ -41,6 +45,7 @@ async def inicia_pre_processamento(csvFile):
 
     indices = df.apply(is_ean_valid, axis=1)
     df = df[indices]
+    
 
     #Valores Nulos
     df[df['DescricaoProduto'].isnull()]
@@ -71,6 +76,7 @@ async def inicia_pre_processamento(csvFile):
     #Exportação
     data_file = 'medicamentos.csv'
 
+
     async def medicamentos():
         pd.DataFrame(df).to_csv('{}{}'.format(data_path, data_file), 
                         sep=';', 
@@ -81,9 +87,9 @@ async def inicia_pre_processamento(csvFile):
 
     #Pensar em como executar o data augmentation
     async def data_Augmentation():
-         os.system('python ./data_augmentation.py "./dados/medicamentos.csv" "./dados/medicamentos_aumentado.csv" medicamentos 1')
+         os.system('python3 ./data_augmentation.py "./dados/medicamentos.csv" "./dados/medicamentos_aumentado.csv" medicamentos 1')
 
-    await data_Augmentation()    
+    await data_Augmentation()
     
     #PRÉ PROCESSAMENTO PÓS AUGMENTATION
     # loading new_stopwords
@@ -132,6 +138,7 @@ async def inicia_pre_processamento(csvFile):
     buff = 300
     content = ''
 
+    
     with open(src, 'r',encoding='latin1') as fs:  
         with open(target, 'w',encoding='latin1') as ft:
             ft.write(fs.readline())  # header
@@ -147,8 +154,12 @@ async def inicia_pre_processamento(csvFile):
     data_file = 'medicamentos_aumentado_mod.csv'
     src = '{}{}'.format(data_path, data_file)
 
+
     df = pd.read_csv(src, dtype={0:int, 1:str, 2:str}, sep=';',encoding='latin1')
     df.shape
+
+    print(src)
+    print(df.head())
 
     idxs = list()
     removed = list()
@@ -181,6 +192,8 @@ async def inicia_pre_processamento(csvFile):
     df_grouped = df_removed.groupby('master_idx')['removed_idx'].apply(list).reset_index()
 
     pd.set_option('display.max_colwidth', -1)
+    print('AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII')
+    print(df_grouped)
     master, removed = df_grouped.loc[0].values
     indexes = [master] + removed
     df.loc[indexes][['cod', 'descricao']]

@@ -102,12 +102,12 @@ const headCells = [
     disablePadding: false,
     label: "CLEAN",
   },
-  {
-    id: "foiPredito",
-    numeric: false,
-    disablePadding: false,
-    label: "Foi Predito?",
-  },
+  // {
+  //   id: "foiPredito",
+  //   numeric: false,
+  //   disablePadding: false,
+  //   label: "Foi Predito?",
+  // },
 ];
 
 function EnhancedTableHead(props) {
@@ -177,6 +177,7 @@ const EnhancedTableToolbar = (props) => {
   const { rowsSelected } = props;
   const { rows } = props;
   const { setRows } = props;
+  const { searchString } = props;
 
   return (
     <Toolbar
@@ -208,9 +209,8 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          Lista de compras para o produto{" "}
           <Typography sx={{ fontWeight: "bold" }} variant="h8">
-            Dipirona
+          {searchString ? `Lista de compras para o produto ${searchString}` : ''}
           </Typography>
         </Typography>
       )}
@@ -255,7 +255,15 @@ export default function EnhancedTable({ dataset, setDataset, selectDataset }) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
+  const [searchString, setSearchString] = React.useState("");
   //const [rows, setRows] = React.useState(dataset);
+  
+  
+  
+  
+  
+  
+  // Ajustar para ser variável!!!
   const rows = dataset;
   const setRows = setDataset;
 
@@ -337,6 +345,7 @@ export default function EnhancedTable({ dataset, setDataset, selectDataset }) {
             rowsSelected={selected}
             rows={rows}
             setRows={handleRowDeletion}
+            searchString={searchString}
           />
           <TableContainer>
             <Table
@@ -407,13 +416,13 @@ export default function EnhancedTable({ dataset, setDataset, selectDataset }) {
                           {row.DescricaoProduto}
                         </TableCell>
                         <TableCell align="right">{row.CLEAN}</TableCell>
-                        <TableCell align="right">
+                        {/* <TableCell align="right">
                           {foiPredito(
                             row.CLEAN !== "N/I" && row.CLEAN !== "-1"
                               ? false
                               : true
                           )}
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     );
                   })}
