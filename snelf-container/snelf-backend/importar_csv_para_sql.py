@@ -100,7 +100,7 @@ def insert_transactions(csvFile):
     #             for i in inputArray)
     args = ','.join(f"{i}" for i in inputArray)
     
-    sql = "INSERT INTO medicine_transactions(CodigoNFe,DataEmissao,MunicipioEmitente,unidadecomercial,quantidadecomercial,valorunitariocomercial,DescricaoProduto,CLEAN) VALUES "
+    sql = "INSERT INTO transactions(CodigoNFe,DataEmissao,MunicipioEmitente,unidadecomercial,quantidadecomercial,valorunitariocomercial,DescricaoProduto,CLEAN) VALUES "
     cursor.execute(sql + (args))
     
     connection.commit()
@@ -175,7 +175,7 @@ def get_all_medicine_expanded_df():
     connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
     connection.autocommit=True
     cursor = connection.cursor()
-    sql_table_creation = "SELECT mt.DescricaoProduto, mt.CLEAN FROM medicine_transactions mt"
+    sql_table_creation = "SELECT mt.DescricaoProduto, mt.CLEAN FROM transactions mt"
     cursor.execute(sql_table_creation)
 
     medicine_transactions_records = cursor.fetchall()
@@ -226,33 +226,27 @@ def get_medicines_from_label(label):
     
     return medicines_object
 
+def get_limited_medicines_with_clean():
+    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
+    connection.autocommit=True
+    cursor = connection.cursor()
+    sql_table_creation = f"""select distinct descricaoproduto, clean
+                             from transactions
+                             where clean NOT in ('', 'N/I', '-1', '0')
+                             order by clean desc
+                             limit 22000"""
 
-# Path('my_data.db').touch()
+    cursor.execute(sql_table_creation)
 
-# produtos_farmaceuticos = pd.read_csv('produtos_farmaceuticos.csv')
+    medicine_transactions_with_clean = cursor.fetchall()
+    
+    medicine_transactions_dataframe = pd.DataFrame(medicine_transactions_with_clean, columns=["DescricaoProduto","CLEAN"])
 
-# produtos_farmaceuticos.to_sql('produtos_farmaceuticos', connection, if_exists='append', index = False)
+    print(medicine_transactions_dataframe)
+    
+    connection.commit()
+    connection.close()
+    
+    return medicine_transactions_dataframe
 
-# conn = sqlite3.connect('my_data.db')
-# c = conn.cursor()
-
-# c.execute('''CREATE TABLE produtos_farmaceuticos (CodigoNFe int, DataEmissao date, MunicipioEmitente text, unidadecomercial text, quantidadecomercial real, valorunitariocomercial real, DescricaoProduto text, CLEAN text)''')
-
-
-# c.execute('''SELECT * FROM produtos_farmaceuticos''').fetchall()
-
-
-# create_description_ean()
-# create_medicine_transactions()
-
-# insert_description_ean()
-
-
-
-# Checar para adicionar múltiplos, a partir de csv
-# values = [(17, 'rachel', 67), (18, 'ross', 79), (19, 'nick', 95)]
- 
-# # executing the sql statement
-# cursor.executemany("INSERT INTO classroom VALUES(%s,%s,%s)", values)
-
-
+get_limited_medicines_with_clean()
