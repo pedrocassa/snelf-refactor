@@ -10,13 +10,14 @@ import time
 from imblearn.over_sampling import RandomOverSampler
 from sklearn.model_selection import train_test_split
 from lib.extractor1 import Extractor as xtc
-from importar_csv_para_sql import get_all_medicine_df, get_all_medicine_expanded_df
+from importar_csv_para_sql import get_all_medicine_df, get_all_medicine_expanded_df, get_limited_medicines_with_clean
 
 #Carrega dados
 #data_path = '../datasets/medicamentos/'
 #data_file = 'produtos_farmaceuticos.csv'
 
 async def inicia_pre_processamento():
+    print('Iniciou pré-processamento')
     cols = ['DescricaoProduto','CLEAN']
     
     data_path = './dados/'
@@ -24,7 +25,9 @@ async def inicia_pre_processamento():
         os.mkdir(data_path)
 
 
-    df = get_all_medicine_expanded_df()
+    # df = get_all_medicine_expanded_df()
+    df = get_limited_medicines_with_clean()
+    print('TERMINOU DE PEGAR O DATA FRAME.')
     
     # df = pd.read_csv(csvFile.file, usecols=cols, dtype={0:str, 1:int})
     # print(df.head())

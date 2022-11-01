@@ -39,8 +39,8 @@ export default function Resultado({ resultados }) {
     setSelectedPageId(newSelectedPageId);
   };
 
-  debugger;
-  console.log(`resultados: ${resultados}`);
+  // debugger;
+  // console.log(`resultados: ${resultados}`);
   dados = resultados != null ? Object.keys(resultados).map((key) => resultados[key]) : [];
   //variável que controla o dataset para exclusão de registros
 
@@ -48,7 +48,7 @@ export default function Resultado({ resultados }) {
   const [dataset, setDataset] = React.useState(dados);
   const selectDataset = (event, newDataset) => {
     setDataset(newDataset);
-    console.log(newDataset);
+    // console.log(newDataset);
   };
 
   return (
