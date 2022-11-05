@@ -1,7 +1,8 @@
 from http.client import HTTPException
 from fastapi import Body, FastAPI, File, UploadFile, Query, Request
-from starlette.middleware.cors import CORSMiddleware
-# from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware import Middleware
+# from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from pre_processamento import inicia_pre_processamento
 import fasttext 
 from importar_csv_para_sql import insert_medicine, insert_transactions, get_medicines_from_label
@@ -9,26 +10,7 @@ import pdb
 # from testesJP import testagem
 
 
-app = FastAPI()
-
-#burlando cors
-origins = [
-    "http://localhost",
-    "http://localhost:3001",
-    "http://localhost:3001/",
-    "http://localhost:3001/importarMedicamento",
-    "http://localhost:3001/importarTransacao",
-    "http://localhost:3001/busca",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["GET","POST","PUT"],
-    allow_headers=["*"],
-)
-
+app = FastAPI(debug=True)
 
 @app.get("/")
 async def root():
@@ -93,3 +75,15 @@ async def importarTransacoes(csvFile: UploadFile = File(...)):
         return {"filename": csvFile.filename, "status":"Arquivo importado com sucesso."}
     else:
         raise HTTPException(status_code=422, detail="Formato de arquivo não suportado")
+
+
+
+
+#burlando cors
+app = CORSMiddleware(
+    app=app,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
