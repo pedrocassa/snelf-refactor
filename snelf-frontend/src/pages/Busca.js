@@ -25,22 +25,10 @@ export default function Busca() {
         formData.append("stringBusca", search);
         await fetch(CONSULTA_ENDPOINT, {
             method: "POST",
-            body: search,
-        })
-            .then(r => r.json().then(data => ({ status: r.status, body: data })))
+            body: search
+        }).then(r => r.json().then(data => ({ status: r.status, body: data })))
             .then(responseData => {
-                console.log(responseData.body.medicines);
-
-                // passResults(responseData.body.medicines);
-
-                // responseData.body.medicines.forEach(medicine => {
-                //     console.log(medicine);
-                //     debugger;
-                //     setResult(previousResult => {
-                //         return result.append(medicine)
-                //     });
-                // });
-                
+                console.log(responseData.body.medicines);                
                 
                 setResult(responseData.body.medicines);
                 console.log(`result: ${result}`);
