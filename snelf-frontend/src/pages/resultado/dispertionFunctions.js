@@ -1,4 +1,5 @@
 export const calculaMediana = (arr) => {
+  debugger;
   const { length } = arr;
 
   arr.sort((a, b) => a - b);

@@ -186,6 +186,41 @@ def get_all_medicine_expanded_df():
     
     return medicine_transactions_dataframe
 
+def getTransactionsFromClean(busca):
+    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
+    connection.autocommit=True
+    cursor = connection.cursor()
+    sql_table_creation = f"""select *
+                             from transactions t 
+                             where clean like '%{busca}%'"""
+
+    cursor.execute(sql_table_creation)
+
+    medicine_transactions_consulted = cursor.fetchall()
+    
+    medicines_object = []
+    for transaction in medicine_transactions_consulted:
+        medicines_object.append({
+            'id': transaction[0],
+            'CodigoNFe': transaction[1],
+            'DataEmissao': transaction[2],
+            'MunicipioEmitente': transaction[3],
+            'unidadecomercial': transaction[4],
+            'quantidadecomercial': transaction[5],
+            'valorunitariocomercial': transaction[6],
+            'DescricaoProduto': transaction[7],
+            'CLEAN': transaction[8]
+        })
+
+    print('medicines_object')
+    print(medicines_object)
+
+    connection.commit()
+    connection.close()
+    
+    return medicines_object
+
+
 def get_medicines_from_label(label):
     connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
     connection.autocommit=True
@@ -213,7 +248,7 @@ def get_medicines_from_label(label):
             'MunicipioEmitente': transaction[3],
             'unidadecomercial': transaction[4],
             'quantidadecomercial': transaction[5],
-            'valornitariocomercial': transaction[6],
+            'valorunitariocomercial': transaction[6],
             'DescricaoProduto': transaction[7],
             'CLEAN': transaction[8]
         })
