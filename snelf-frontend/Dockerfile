@@ -4,7 +4,8 @@ WORKDIR /front_app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install \
+    && npm install react-plotly.js plotly.js
 
 COPY ./ .
 

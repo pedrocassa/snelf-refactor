@@ -1,37 +1,39 @@
-import { Alert, Box, Button, Grid, TextField, Typography } from '@mui/material'
-import React from 'react'
-import Navbar from '../components/navbar/Navbar'
-import { Link } from 'react-router-dom';
+import { Alert, Box, Button, Grid, TextField, Typography, Select, MenuItem } from '@mui/material';
+import React from 'react';
+import Navbar from '../components/navbar/Navbar';
 import { useState } from 'react';
 import Resultado from './Resultado';
 
 
-const CONSULTA_ENDPOINT = `http://localhost:8000/consultarGrupo`;
+const CONSULTA_PRODUTO_ENDPOINT = `http://localhost:8000/consultarGrupo`;
+const CONSULTA_CLEAN_ENDPOINT = `http://localhost:8000/consultarClean`;
 
 export default function Busca() {
     const [search, setSearch] = useState('');
     const [result, setResult] = useState([]);
     const [resultMessage, setResultMessage] = React.useState();
+    const [searchType, setSearchType] = React.useState('selecione');
 
+    const handleSearchType = (e) => {
+        e.preventDefault();
+        setSearchType(e.target.value);
+    }
     
-    // const passResults = (resultado) => {
-    //     setResult(resultado);
-    //     console.log(`Resultado: ${result}`);
-    // }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         let formData = new FormData();
         formData.append("stringBusca", search);
-        await fetch(CONSULTA_ENDPOINT, {
+        let chosenType = searchType == 'produto' ? CONSULTA_PRODUTO_ENDPOINT : CONSULTA_CLEAN_ENDPOINT;
+        debugger;
+        await fetch(chosenType, {
             method: "POST",
             body: search
         }).then(r => r.json().then(data => ({ status: r.status, body: data })))
             .then(responseData => {
+                console.log('AQUI');
                 console.log(responseData.body.medicines);                
                 
                 setResult(responseData.body.medicines);
-                console.log(`result: ${result}`);
 
                 if (responseData.status === 200) {
                     setResultMessage(<Alert variant='filled' severity='success' onClose={() => { setResultMessage() }}>Consulta realizada com sucesso: Grupo - {responseData.body}.</Alert>);
@@ -61,17 +63,33 @@ export default function Busca() {
                             </Typography>
                         </Box>
 
+                        <div style={{textAlign: 'center'}}>
+                            <label style={{margin: '20px'}}>Buscar por</label>
+                            <Select
+                                value={searchType}
+                                defaultValue='selecione'
+                                autoWidth
+                                onChange={handleSearchType}
+                                >
+                                <MenuItem value={'selecione'}>Selecione</MenuItem>
+                                <MenuItem value={'produto'}>Produto</MenuItem>
+                                <MenuItem value={'clean'}>CLEAN</MenuItem>
+                            </Select>
+                            <div style={{margin: '10px'}}></div>
+                        </div>
+
+                        
                         <TextField onChange={(event) => setSearch(event.target.value)} fullWidth label="Insira o nome do produto" id="fullWidth" />
 
                         <Box pt={7}>
                             <Grid style={{textAlign: "-webkit-center"}} item>
-                                <Button component="label" type="submit" onClick={handleSubmit} disabled={search == ''} variant="contained">
+                                <Button component="label" type="submit" onClick={handleSubmit} disabled={search == '' || ['selecione', ''].includes(searchType)} variant="contained">
                                     Buscar
                                 </Button>
                             </Grid>
                         </Box>
 
-                        { result.length != 0 ? <Resultado resultados={result} /> : <div></div> }
+                        { result.length != 0 ? <Resultado resultados={result} stringBusca={search} tipoBusca={searchType} /> : <div></div> }
 
                 </Box>
             </Box>

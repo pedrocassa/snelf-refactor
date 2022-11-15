@@ -5,16 +5,12 @@ from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from pre_processamento import inicia_pre_processamento
 import fasttext 
-from importar_csv_para_sql import insert_medicine, insert_transactions, get_medicines_from_label
+from importar_csv_para_sql import insert_medicine, insert_transactions, get_medicines_from_label, getTransactionsFromClean
 import pdb
 # from testesJP import testagem
 
 
 app = FastAPI(debug=True)
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
 
 #rota de importação do csv. estudando como fazer para upload em csv maior
 @app.post("/importarCsv")
@@ -43,14 +39,25 @@ async def treinamentoModelo():
 async def consultaGrupo(busca: str = Body(...)):
     try:
         #from fastText.python.fasttext_module.fasttext.FastText import _FastText as fasttext
-        model = fasttext.supervised('dados/data.train.txt','modelo/modelo')
+        # model = fasttext.supervised('dados/data.train.txt','modelo/modelo')
+        model = fasttext.load_model("modelo/modelo.bin")
         label = model.predict_proba([busca],k=1)[0][0][0]
         
         # Consultar a partir do retornado
         transactions = get_medicines_from_label(label)
-        
         return { 'medicines': transactions }
 
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=422, detail="Consulta não pôde ser realizada.")
+
+@app.post("/consultarClean")
+async def consultaClean(busca: str = Body(...)):
+    try:
+        transactions = getTransactionsFromClean(busca)
+        print('transactions:')
+        print(transactions)
+        return { 'medicines': transactions }
     except Exception as e:
         print(e)
         raise HTTPException(status_code=422, detail="Consulta não pôde ser realizada.")
