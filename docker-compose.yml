@@ -6,6 +6,7 @@ services:
     image: postgres:14-alpine
     container_name: snelf-postgres
     volumes:
+      - ./init-scripts:/docker-entrypoint-initdb.d
       - snelf-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
