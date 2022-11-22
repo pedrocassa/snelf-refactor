@@ -106,6 +106,31 @@ export function getResultPage(selectedPageId,dataset,setDataset,selectDataset) {
   }
 }
 
+const handleExport = (dados) => {
+  const rows = dados.map(row => ({
+    CLEAN: row.CLEAN,
+    CodigoNFe: row.CodigoNFe,
+    DataEmissao: row.DataEmissao,
+    DescricaoProduto: row.DescricaoProduto,
+    MunicipioEmitente: row.MunicipioEmitente,
+    id: row.id,
+    quantidadecomercial: row.quantidadecomercial,
+    unidadecomercial: row.unidadecomercial,
+    valorunitariocomercial: row.valorunitariocomercial
+  }))
+
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+
+  var workbook = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Medicamentos");
+  
+  XLSX.utils.sheet_add_aoa(worksheet, [['CLEAN','CodigoNFe','DataEmissao','DescricaoProduto','MunicipioEmitente','id','quantidadecomercial','unidadecomercial','valorunitariocomercial']], { origin: "A1" } );
+  
+  XLSX.writeFile(workbook, "Result.xlsx", { compression: true });
+}
+
+
 export default function Resultado({ resultados, stringBusca, tipoBusca }) {
   //variável que controla a barra de seleção, e consequentemente qual página está sendo exibida
   const [resultado, setResultado] = React.useState("");
@@ -120,31 +145,7 @@ export default function Resultado({ resultados, stringBusca, tipoBusca }) {
     setDataset(newDataset);
   };
 
-  const handleExport = (dados) => {
-    debugger;
-
-    const rows = dados.map(row => ({
-      CLEAN: row.CLEAN,
-      CodigoNFe: row.CodigoNFe,
-      DataEmissao: row.DataEmissao,
-      DescricaoProduto: row.DescricaoProduto,
-      MunicipioEmitente: row.MunicipioEmitente,
-      id: row.id,
-      quantidadecomercial: row.quantidadecomercial,
-      unidadecomercial: row.unidadecomercial,
-      valorunitariocomercial: row.valorunitariocomercial
-    }))
-
-    const worksheet = XLSX.utils.json_to_sheet(rows);
-
-    var workbook = XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Medicamentos");
-    
-    XLSX.utils.sheet_add_aoa(worksheet, [['CLEAN','CodigoNFe','DataEmissao','DescricaoProduto','MunicipioEmitente','id','quantidadecomercial','unidadecomercial','valorunitariocomercial']], { origin: "A1" } );
-    
-    XLSX.writeFile(workbook, "Result.xlsx", { compression: true });
-  }
+  
   
   return (
     <div>

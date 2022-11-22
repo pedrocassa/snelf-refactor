@@ -30,8 +30,6 @@ export default function Busca() {
             body: search
         }).then(r => r.json().then(data => ({ status: r.status, body: data })))
             .then(responseData => {
-                console.log('AQUI');
-                console.log(responseData.body.medicines);                
                 
                 setResult(responseData.body.medicines);
 
