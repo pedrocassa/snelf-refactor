@@ -1,27 +1,29 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
+import { Box, TextField, Switch, FormControlLabel, Tooltip, IconButton, Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Toolbar, Typography, Paper, ThemeProvider, createTheme } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { StyleSheet } from '@react-pdf/renderer';
+import { useEffect, useRef } from 'react';
+
+
+const stylesLista = StyleSheet.create({
+  boxDiv: {
+    width: '85%',
+    minHeight: '10%',
+    overflow: 'hidden',
+    border: '5px solid blue',
+    padding: '50px',
+    margin: '20px',
+  },
+  column: {
+    float: 'left',
+    width: '50%',
+    textAlign: '-webkit-center',
+  }
+});
 
 //tema
 const theme = createTheme({
@@ -255,16 +257,9 @@ export default function EnhancedTable({ dataset, setDataset, selectDataset }) {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
   const [searchString, setSearchString] = React.useState("");
-  //const [rows, setRows] = React.useState(dataset);
-  
-  
-  
-  
-  
-  
-  // Ajustar para ser variável!!!
-  const rows = dataset;
-  const setRows = setDataset;
+  const [rows, setRows] = React.useState(JSON.parse(JSON.stringify(dataset)));
+  const [copyRows, setCopyRows] = React.useState(JSON.parse(JSON.stringify(dataset)));
+  const [hiddenComponent, setHiddenComponent] = React.useState(true);
 
   const handleRowDeletion = (r) => {
     setRows(r);
@@ -331,12 +326,68 @@ export default function EnhancedTable({ dataset, setDataset, selectDataset }) {
     }
   };
 
+  const showFilterComponent = () => {
+    hiddenComponent === true ? setHiddenComponent(false) : setHiddenComponent(true);
+  }
+  
+  const filterData = () => {
+    
+    var filteredRows = copyRows.filter((row) => {
+      return row.CodigoNFe.toString().indexOf(document.getElementById('codigoNFE').value) !== -1 &&
+      row.DataEmissao.toString().indexOf(document.getElementById('dataEmissao').value) !== -1 &&
+      row.MunicipioEmitente.toString().indexOf(document.getElementById('municipioEmitente').value) !== -1 &&
+      row.unidadecomercial.toString().indexOf(document.getElementById('unidadeComercial').value) !== -1 &&
+      row.quantidadecomercial.toString().indexOf(document.getElementById('quantidadeComercial').value) !== -1 &&
+      row.valorunitariocomercial.toString().indexOf(document.getElementById('valorUnitarioComercial').value) !== -1 &&
+      row.DescricaoProduto.toString().indexOf(document.getElementById('descricaoProduto').value) !== -1 &&
+      row.CLEAN.toString().indexOf(document.getElementById('clean').value) !== -1
+    })
+
+    setRows(filteredRows);
+    setCopyRows(JSON.parse(JSON.stringify(dataset)));
+  }
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
     <ThemeProvider theme={theme}>
+      {
+        hiddenComponent ? null : (
+        <div style={stylesLista.boxDiv}>
+          <h1 style={{textAlign: 'center'}}>Filtrar</h1>
+          <div style={stylesLista.column}>
+            <div style={{margin: '10px'}}>
+              <TextField id="codigoNFE" onChange={filterData} label="Código NFE" variant="filled" />              
+            </div>
+            <div style={{margin: '10px'}}>
+              <TextField id="municipioEmitente" onChange={filterData} label="Município Emitente" variant="filled" />              
+            </div>
+            <div style={{margin: '10px'}}>
+              <TextField id="quantidadeComercial" onChange={filterData} label="Quantidade Comercial" variant="filled" />              
+            </div>
+            <div style={{margin: '10px'}}>
+              <TextField id="descricaoProduto" onChange={filterData} label="Descrição do Produto" variant="filled" />              
+            </div>
+          </div>
+          <div style={stylesLista.column}>
+            <div style={{margin: '10px'}}>
+              <TextField id="dataEmissao" onChange={filterData} label="Data de Emissão" variant="filled" />              
+            </div>
+            <div style={{margin: '10px'}}>
+              <TextField id="unidadeComercial" onChange={filterData} label="Unidade Comercial" variant="filled" />              
+            </div>
+            <div style={{margin: '10px'}}>
+              <TextField id="valorUnitarioComercial" onChange={filterData} label="Valor Unitário Comercial" variant="filled" />              
+            </div>
+            <div style={{margin: '10px'}}>
+              <TextField id="clean" onChange={filterData} label="CLEAN" variant="filled" />              
+            </div>
+          </div>
+        </div>
+        )}
+
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
           <EnhancedTableToolbar
@@ -346,6 +397,11 @@ export default function EnhancedTable({ dataset, setDataset, selectDataset }) {
             setRows={handleRowDeletion}
             searchString={searchString}
           />
+          <Tooltip title="Filter list">
+            <IconButton>
+              <FilterListIcon onClick={showFilterComponent} />
+            </IconButton>
+          </Tooltip>
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
