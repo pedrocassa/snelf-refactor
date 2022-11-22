@@ -10,7 +10,7 @@ import time
 from imblearn.over_sampling import RandomOverSampler
 from sklearn.model_selection import train_test_split
 from lib.extractor1 import Extractor as xtc
-from importar_csv_para_sql import get_all_medicine_df, get_all_medicine_expanded_df, get_limited_medicines_with_clean
+from importar_csv_para_sql import get_limited_medicines_with_clean
 
 #Carrega dados
 #data_path = '../datasets/medicamentos/'
@@ -318,7 +318,8 @@ async def inicia_pre_processamento():
     df_test['label'] = '__label__' + df_test['chave'].astype(str)
     df_test.drop(['cod', 'chave'], axis=1, inplace=True)
     df_test = df_test[['label', 'descricao']]
-    np.savetxt('./dados/data.test.txt', df_test, fmt='%s', encoding='utf-8')
+    # np.savetxt('./dados/data.test.txt', df_test, fmt='%s', encoding='utf-8')
+    np.savetxt('./dados/data.test.txt', df_test, fmt='%s')
 
     # Remover do dataset aumentado todos os registros com descrição pertencente ao conjunto de dados
     df = pd.read_csv('./dados/oversampled.csv', sep=';')
@@ -328,7 +329,8 @@ async def inicia_pre_processamento():
     df['label'] = '__label__' + df['chave'].astype(str)
     df.drop(['cod', 'chave'], axis=1, inplace=True)
     df = df[['label', 'descricao']]
-    np.savetxt('./dados/data.train.txt', df, fmt='%s', encoding='utf-8')
+    # np.savetxt('./dados/data.train.txt', df, fmt='%s', encoding='utf-8')
+    np.savetxt('./dados/data.train.txt', df, fmt='%s')
 
     #inserir condição para validar se ocorreu o pre processamento ou não
     return "Pré processamento feito com sucesso"

@@ -5,9 +5,9 @@ from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from pre_processamento import inicia_pre_processamento
 import fasttext 
-from importar_csv_para_sql import insert_medicine, insert_transactions, get_medicines_from_label, getTransactionsFromClean
+from importar_csv_para_sql import insert_transactions, get_medicines_from_label, getTransactionsFromClean
 import pdb
-# from testesJP import testagem
+import unittest
 
 
 app = FastAPI(debug=True)
@@ -63,13 +63,13 @@ async def consultaClean(busca: str = Body(...)):
         raise HTTPException(status_code=422, detail="Consulta não pôde ser realizada.")
 
 # rota de importação do csv. estudando como fazer para upload em csv maior
-@app.post("/importarMedicamentos")
-async def importarMedicamentos(csvFile: UploadFile = File(...)):
-    if csvFile.filename.endswith('.csv'):
-        insert_medicine(csvFile)
-        return {"filename": csvFile.filename, "status":"Arquivo importado com sucesso."}
-    else:
-        raise HTTPException(status_code=422, detail="Formato de arquivo não suportado")
+# @app.post("/importarMedicamentos")
+# async def importarMedicamentos(csvFile: UploadFile = File(...)):
+#     if csvFile.filename.endswith('.csv'):
+#         insert_medicine(csvFile)
+#         return {"filename": csvFile.filename, "status":"Arquivo importado com sucesso."}
+#     else:
+#         raise HTTPException(status_code=422, detail="Formato de arquivo não suportado")
 
 @app.get("/teste")
 async def root():
