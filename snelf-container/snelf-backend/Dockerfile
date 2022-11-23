@@ -23,6 +23,8 @@ RUN pip3 install -v --no-cache-dir --upgrade -r /back_app/requirements.txt
 
 RUN pip3 install fasttext_win
 
+RUN pip3 install pytest
+
 COPY . /back_app/
 
 # WORKDIR /code/snelf-backend

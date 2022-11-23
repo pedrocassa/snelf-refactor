@@ -3,6 +3,7 @@ import React from 'react';
 import Navbar from '../components/navbar/Navbar';
 import { useState } from 'react';
 import Resultado from './Resultado';
+import LoadingSpinner from './LoadingSpinner';
 
 
 const CONSULTA_PRODUTO_ENDPOINT = `http://localhost:8000/consultarGrupo`;
@@ -11,8 +12,11 @@ const CONSULTA_CLEAN_ENDPOINT = `http://localhost:8000/consultarClean`;
 export default function Busca() {
     const [search, setSearch] = useState('');
     const [result, setResult] = useState([]);
+    const [isLoading, setIsLoading] = React.useState(false);
     const [resultMessage, setResultMessage] = React.useState();
     const [searchType, setSearchType] = React.useState('selecione');
+
+    const page = 'busca';
 
     const handleSearchType = (e) => {
         e.preventDefault();
@@ -21,6 +25,8 @@ export default function Busca() {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setResult([]);
+        setIsLoading(true);
         let formData = new FormData();
         formData.append("stringBusca", search);
         let chosenType = searchType == 'produto' ? CONSULTA_PRODUTO_ENDPOINT : CONSULTA_CLEAN_ENDPOINT;
@@ -30,7 +36,7 @@ export default function Busca() {
             body: search
         }).then(r => r.json().then(data => ({ status: r.status, body: data })))
             .then(responseData => {
-                
+                setIsLoading(false);
                 setResult(responseData.body.medicines);
 
                 if (responseData.status === 200) {
@@ -86,8 +92,7 @@ export default function Busca() {
                                 </Button>
                             </Grid>
                         </Box>
-
-                        { result.length != 0 ? <Resultado resultados={result} stringBusca={search} tipoBusca={searchType} /> : <div></div> }
+                {isLoading ? <LoadingSpinner /> : result.length != 0 ? <Resultado resultados={result} stringBusca={search} tipoBusca={searchType} /> : <div></div> }
 
                 </Box>
             </Box>
