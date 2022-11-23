@@ -5,9 +5,10 @@ from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from pre_processamento import inicia_pre_processamento
 import fasttext 
-from importar_csv_para_sql import insert_transactions, get_medicines_from_label, getTransactionsFromClean
+from importar_csv_para_sql import insert_transactions, get_medicines_from_label, getTransactionsFromClean, get_transactions_from_product
 import pdb
 import unittest
+import numpy as np
 
 
 app = FastAPI(debug=True)
@@ -38,13 +39,13 @@ async def treinamentoModelo():
 @app.post("/consultarGrupo")
 async def consultaGrupo(busca: str = Body(...)):
     try:
-        #from fastText.python.fasttext_module.fasttext.FastText import _FastText as fasttext
-        # model = fasttext.supervised('dados/data.train.txt','modelo/modelo')
+        array_from_product = get_transactions_from_product(busca)
+        
         model = fasttext.load_model("modelo/modelo.bin")
         label = model.predict_proba([busca],k=1)[0][0][0]
         
-        # Consultar a partir do retornado
-        transactions = get_medicines_from_label(label)
+        array_from_prediction = get_medicines_from_label(label)
+        transactions = array_from_product + array_from_prediction
         return { 'medicines': transactions }
 
     except Exception as e:
