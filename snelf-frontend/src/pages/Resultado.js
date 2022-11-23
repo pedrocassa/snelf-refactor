@@ -133,7 +133,6 @@ const handleExport = (dados) => {
 
 export default function Resultado({ resultados, stringBusca, tipoBusca }) {
   //variável que controla a barra de seleção, e consequentemente qual página está sendo exibida
-  const [resultado, setResultado] = React.useState("");
   const [selectedPageId, setSelectedPageId] = React.useState(1);
   const selectPageById = (event, newSelectedPageId) => {
     setSelectedPageId(newSelectedPageId);
