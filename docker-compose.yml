@@ -17,7 +17,7 @@ services:
       POSTGRES_PASSWORD: testejp
 
   snelf-back:
-    build: ./snelf-container/snelf-backend
+    build: ./snelf_backend
     container_name: snelf-back
     environment:
       - DB_SERVER=snelf-postgres
@@ -25,27 +25,33 @@ services:
       - POSTGRES_USER=testejp
       - POSTGRES_PASSWORD=testejp
     volumes:
-      - ./snelf-container/snelf-backend:/back_app
+      - ./snelf_backend:/back_app
     ports:
       - 8000:8000
     depends_on:
       - snelf-postgres
 
   snelf-front:
-    build: ./snelf-frontend
+    build: ./snelf_frontend
     container_name: snelf-front
     stdin_open: true
     # Mount our host directory to the docker container
     # Mount (.) current directory to the docker container code/snelf-frontend
     # Reflect file changes from host to container
     volumes:
-      - ./snelf-frontend:/front_app
+      - ./snelf_frontend:/front_app
       - /front_app/node_modules
     ports:
       - 3001:3000
     depends_on:
       - snelf-back
     command: npm run start
+
+  snelf-tests:
+    build: ./tests
+    container_name: snelf-tests
+    depends_on:
+      - snelf-back
 
 
 volumes:
