@@ -5,7 +5,7 @@ import psycopg2
 import pdb
 from datetime import datetime
 
-    
+
 def insert_transactions(csvFile):
     connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
     connection.autocommit=True
@@ -15,22 +15,35 @@ def insert_transactions(csvFile):
     df = pd.read_csv(csvFile.file, usecols=cols, dtype={0:int, 1: str, 2:str, 3:str, 4:float, 5:float, 6:str, 7:str}, sep=',')
     
     inputArray = []
-    
+
     iterative_string=""
 
     for index, row in df.iloc[0:len(df)].iterrows():
-        inputArray.append((row.CodigoNFe, row.DataEmissao, row.MunicipioEmitente, row.unidadecomercial, row.quantidadecomercial, row.valorunitariocomercial, row.DescricaoProduto, row.CLEAN))
+        inputArray.append((row.CodigoNFe, row.DataEmissao, row.MunicipioEmitente, row.unidadecomercial, row.quantidadecomercial, row.valorunitariocomercial, row.DescricaoProduto.replace('\'',''), row.CLEAN))
         iterative_string = iterative_string + "%s"
     
     iterative_string = iterative_string.replace("s%","s,%")
     
     args = ','.join(f"{i}" for i in inputArray)
+
     
     sql = "INSERT INTO transactions(CodigoNFe,DataEmissao,MunicipioEmitente,unidadecomercial,quantidadecomercial,valorunitariocomercial,DescricaoProduto,CLEAN) VALUES "
+    
+    
     cursor.execute(sql + (args))
     
     connection.commit()
+
+
+    # Insiro "manualmente" nas tabelas de classes e de products_classes
+
+
+    
+
     connection.close()
+
+
+
 
 # Método para população da Tabela classes
 def fill_classes_table():
