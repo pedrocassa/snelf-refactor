@@ -31,4 +31,6 @@ COPY . /back_app/
 
 EXPOSE 8000
 
+# ENTRYPOINT pytest -s -v --pdb --disable-warnings test_main.py
+
 CMD ["uvicorn", "main:app", "--host=0.0.0.0", "--reload"]

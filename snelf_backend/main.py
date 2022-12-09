@@ -35,7 +35,6 @@ async def treinamentoModelo():
     except:
         raise HTTPException(status_code=422, detail="Modelo não pôde ser treinado.")
 
-
 @app.post("/consultarGrupo")
 async def consultaGrupo(busca: str = Body(...)):
     try:

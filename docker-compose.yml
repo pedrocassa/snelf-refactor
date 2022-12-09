@@ -47,12 +47,6 @@ services:
       - snelf-back
     command: npm run start
 
-  snelf-tests:
-    build: ./tests
-    container_name: snelf-tests
-    depends_on:
-      - snelf-back
-
 
 volumes:
   snelf-data:
