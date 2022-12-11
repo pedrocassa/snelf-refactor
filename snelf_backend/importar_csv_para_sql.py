@@ -4,6 +4,7 @@ import pandas as pd
 import psycopg2
 import pdb
 from datetime import datetime
+from queries import insert_produtos, insert_products_transactions, insert_classes, insert_products_classes
 
 
 def insert_transactions(csvFile):
@@ -19,6 +20,7 @@ def insert_transactions(csvFile):
     iterative_string=""
 
     for index, row in df.iloc[0:len(df)].iterrows():
+        row.DescricaoProduto.replace('\'','')
         inputArray.append((row.CodigoNFe, row.DataEmissao, row.MunicipioEmitente, row.unidadecomercial, row.quantidadecomercial, row.valorunitariocomercial, row.DescricaoProduto.replace('\'',''), row.CLEAN))
         iterative_string = iterative_string + "%s"
     
@@ -34,15 +36,12 @@ def insert_transactions(csvFile):
     
     connection.commit()
 
-
-    # Insiro "manualmente" nas tabelas de classes e de products_classes
-
-
-    
-
     connection.close()
 
-
+    insert_produtos()
+    insert_products_transactions()
+    insert_classes()
+    insert_products_classes()
 
 
 # Método para população da Tabela classes

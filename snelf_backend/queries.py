@@ -125,5 +125,5 @@ def insert_products_classes():
 # insert_produtos()
 # insert_products_transactions()
 # insert_classes()
-insert_products_classes()
+# insert_products_classes()
 
