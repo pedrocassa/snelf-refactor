@@ -26,7 +26,7 @@ Cabe ressaltar que, na pasta 'dumps do postgresql', existirão diversas versões
     sudo docker-compose start
 #### 7. Subir o projeto
     sudo docker-compose up
-#### 8. Após o projeto subir, realizar o restore do banco de dados
+#### 8. Configurar conexão com SGBD (sistema gerenciador de banco de dados)
 ##### 8.1 Baixar o DBeaver (sistema gerenciador de múltiplos tipos de bancos de dados)
 ##### 8.2 Criar uma nova conexão no DBeaver, com os seguintes dados:
     Host: localhost
@@ -34,21 +34,29 @@ Cabe ressaltar que, na pasta 'dumps do postgresql', existirão diversas versões
     Port: 5432
     Username: testejp
     Password: testejp
-##### 8.3 Realizar o restore do banco de dados
-    - Acessar a conexão testejp > Databases > testejp > Schemas > public
-    - Clicar com o botão direito do mouse sobre public
-    - Tools (Ferramentas) > Backup
-    - Escolher o arquivo de dump, que está na pasta 'dumps do postgresql'
-##### 8.4 Reiniciar o docker
-    - Digitar o comando 'sudo docker-compose stop'
-    - Digitar o comando 'sudo docker-compose start'
-    - Digitar o comando 'sudo docker-compose up'
-##### 8.5 Criar arquivo .env
+##### 8.3 Criar arquivo .env
     - Criar arquivo .env, na pasta snelf-frontend
     - Criar a seguinte variável de ambiente: WDS_SOCKET_PORT=3001
-##### 8.5 Acessar o site
+##### 8.4 Acessar o site
     Acessar localhost:3001, de modo a acessar a página inicial do Snelf
 
+#### 9. Primeiro acesso ao sistema
+Caso seja seu primeiro acesso ao sistema, seguir todos os passos desta seção.
+##### 9.1 Inserir arquivo CSV no sistema
+- Acessar a opção "Importar Base de Transações"
+- Clicar no botão "UPLOAD CSV"
+- O arquivo exemplo que deverá ser importado está na pasta snelf/produtos_farmaceuticos.csv
+- Após feito o upload, clicar no botão "IMPORTAR"
+
+##### 9.2 Treinar o modelo, para clusterização de classes de medicamentos
+- Após realizada a importação do csv, acessar a opção "Atualizar Treinamento do Modelo"
+- Clicar no botão "TREINAR MODELO"
+
+##### 9.3 Pesquisar transações
+- Acessar a opção "Buscar Produtos"
+- Selecionar o modo de busca (Produto ou CLEAN)
+- Inserir o nome do produto ou clean (as buscas podem conter strings parciais)
+- O usuário pode baixar os resultados como PDF ou Excel, visualizar transações passadas para os medicamentos, as principais estatísticas das transações retornadas e um gráfico box-plot considerando os preços praticados para as transações retornadas
 
 
 #### Parar o docker compose:
