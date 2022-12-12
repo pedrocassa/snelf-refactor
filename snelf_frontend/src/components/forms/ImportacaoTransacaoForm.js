@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Alert, Box, Button, Grid, Paper, Typography } from '@mui/material';
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import LoadingSpinner from '../../pages/LoadingSpinner';
+
 
 const IMPORTACAO_ENDPOINT = `http://localhost:8000/importarTransacoes`;
 
@@ -8,6 +10,7 @@ export default function ImportacaoTransacaoForm() {
     const [csvFile, setCsvFile] = React.useState();
     const [filename, setFilename] = React.useState("");
     const [resultMessage, setResultMessage] = React.useState();
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const handleChange = (e) => {
         if (e.target.files.length) {
@@ -18,6 +21,7 @@ export default function ImportacaoTransacaoForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         let formData = new FormData();
         await formData.append("csvFile", csvFile);
         await fetch(IMPORTACAO_ENDPOINT, {
@@ -26,7 +30,7 @@ export default function ImportacaoTransacaoForm() {
         })
         .then(r => r.json().then(data => ({ status: r.status, body: data })))
         .then(obj => {
-            console.log(obj);
+            setIsLoading(false);
             if(obj.status===200){
                 setResultMessage(<Alert variant='filled' severity='success' onClose={() => {setResultMessage()}}>CSV Importado com sucesso</Alert>);
             }else{
@@ -52,6 +56,8 @@ export default function ImportacaoTransacaoForm() {
                                 Importar Base de Dados de Transações
                             </Typography>
                         </Box>
+
+                        {isLoading ? <LoadingSpinner /> :  <div></div> }
 
                         <Box p={2} pb={14} alignSelf="flex-start" textAlign="center">
                             <Typography variant="h8">

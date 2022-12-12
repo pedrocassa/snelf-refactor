@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Alert, Box, Button, Grid, Paper, Typography } from '@mui/material';
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import LoadingSpinner from '../../pages/LoadingSpinner';
 
-const IMPORTACAO_ENDPOINT = `http://localhost:8000/importarMedicamentos`;
+// const IMPORTACAO_ENDPOINT = `http://localhost:8000/importarMedicamentos`;
+const IMPORTACAO_ENDPOINT = `http://localhost:8000/importarTransacoes`;
 
 export default function ImportacaoMedicamentoForm() {
     const [csvFile, setCsvFile] = React.useState();
@@ -19,16 +21,16 @@ export default function ImportacaoMedicamentoForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         let formData = new FormData();
         await formData.append("csvFile", csvFile);
-        debugger;
         await fetch(IMPORTACAO_ENDPOINT, {
             method: "POST",
             body: formData,
         })
         .then(r => r.json().then(data => ({ status: r.status, body: data })))
         .then(obj => {
-            console.log(obj);
+            setIsLoading(false);
             if(obj.status===200){
                 setResultMessage(<Alert variant='filled' severity='success' onClose={() => {setResultMessage()}}>CSV Importado com sucesso</Alert>);
             }else{
@@ -49,6 +51,7 @@ export default function ImportacaoMedicamentoForm() {
                         rowSpacing={1}
                         alignItems="center"
                     >
+                        {isLoading ? <LoadingSpinner /> :  <div></div> }
                         <Box pt={5} pb={1} textAlign="center">
                             <Typography variant="h4">
                                 Importar Base de Dados de Medicamentos

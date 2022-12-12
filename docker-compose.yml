@@ -4,17 +4,17 @@ version: '3.1'
 services:
   snelf-postgres:
     image: postgres:14-alpine
-    container_name: snelf-postgres
-    volumes:
-      - ./init-scripts:/docker-entrypoint-initdb.d
-      - snelf-data:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
     restart: always
+    container_name: snelf-postgres
     environment:
       POSTGRES_DB: testejp
       POSTGRES_USER: testejp
       POSTGRES_PASSWORD: testejp
+    ports:
+      - 5432:5432
+    volumes:
+      - ./init-scripts/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - snelf-data:/var/lib/postgresql/data
 
   snelf-back:
     build: ./snelf_backend
@@ -46,6 +46,9 @@ services:
     depends_on:
       - snelf-back
     command: npm run start
+    environment:
+      - DOCKER_CLIENT_TIMEOUT=120
+      - COMPOSE_HTTP_TIMEOUT=120
 
 
 volumes:

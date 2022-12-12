@@ -14,18 +14,22 @@ export default function TreinamentoModelo() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        await fetch(TREINAMENTO_ENDPOINT, {
-            method: "POST",
-        })
-        .then(r => r.json().then(data => ({ status: r.status })))
-        .then(obj => {
-            if(obj.status===200){
-                setResultMessage(<Alert variant='filled' severity='success' onClose={() => {setResultMessage()}}>Modelo treinado com sucesso</Alert>);
-            }else{
-                setResultMessage(<Alert variant='filled' severity='error' onClose={() => {setResultMessage()}}>Ocorreu um erro no treinamento do modelo. Código {obj.status}</Alert>);
-            }
-            setIsLoading(false)
-        });
+        try{
+                await fetch(TREINAMENTO_ENDPOINT, {
+                    method: "POST",
+                })
+            .then(r => r.json().then(data => ({ status: r.status })))
+            .then(obj => {
+                if(obj.status===200){
+                    setResultMessage(<Alert variant='filled' severity='success' onClose={() => {setResultMessage()}}>Modelo treinado com sucesso</Alert>);
+                }else{
+                    setResultMessage(<Alert variant='filled' severity='error' onClose={() => {setResultMessage()}}>Ocorreu um erro no treinamento do modelo. Código {obj.status}</Alert>);
+                }
+                setIsLoading(false)
+            });
+        } catch(e) {
+            setIsLoading(false);
+        }
     };
 
     return (
