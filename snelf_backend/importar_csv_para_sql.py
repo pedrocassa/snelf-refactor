@@ -7,6 +7,18 @@ from datetime import datetime
 from queries import insert_produtos, insert_products_transactions, insert_classes, insert_products_classes
 
 
+def fill_db_tables():
+    print('Começou')
+    insert_produtos()
+    print('Inseriu produtos')
+    insert_products_transactions()
+    print('Inseriu products_transactions')
+    insert_classes()
+    print('Inseriu classes')
+    insert_products_classes()
+    print('Inseriu products_classes')
+
+
 def insert_transactions(csvFile):
     connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
     connection.autocommit=True
@@ -20,7 +32,12 @@ def insert_transactions(csvFile):
     iterative_string=""
 
     for index, row in df.iloc[0:len(df)].iterrows():
-        row.DescricaoProduto.replace('\'','')
+        # row = list(row)
+        row.DescricaoProduto = row.DescricaoProduto.replace('\'','')
+        row.MunicipioEmitente = row.MunicipioEmitente.replace('\'','')
+        row.unidadecomercial = row.unidadecomercial.replace('\'','')
+        row.CLEAN = row.CLEAN.replace('\'','')
+        # row = tuple(row)
         inputArray.append((row.CodigoNFe, row.DataEmissao, row.MunicipioEmitente, row.unidadecomercial, row.quantidadecomercial, row.valorunitariocomercial, row.DescricaoProduto.replace('\'',''), row.CLEAN))
         iterative_string = iterative_string + "%s"
     
@@ -38,15 +55,11 @@ def insert_transactions(csvFile):
 
     connection.close()
 
-    insert_produtos()
-    insert_products_transactions()
-    insert_classes()
-    insert_products_classes()
 
 
 # Método para população da Tabela classes
 def fill_classes_table():
-    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="localhost", port="5432")
+    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
     connection.autocommit=True
     cursor = connection.cursor()
     
@@ -69,7 +82,7 @@ def fill_classes_table():
 
 
 def fill_products_classes_table():
-    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="localhost", port="5432")
+    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
     connection.autocommit=True
     cursor = connection.cursor()
     

@@ -5,7 +5,7 @@ from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from pre_processamento import inicia_pre_processamento
 import fasttext 
-from importar_csv_para_sql import insert_transactions, get_medicines_from_label, getTransactionsFromClean, get_transactions_from_product
+from importar_csv_para_sql import fill_db_tables, insert_transactions, get_medicines_from_label, getTransactionsFromClean, get_transactions_from_product
 import pdb
 import unittest
 import numpy as np
@@ -27,12 +27,14 @@ async def importarCsv(csvFile: UploadFile = File(...)):
         raise HTTPException(status_code=422, detail="Formato de arquivo não suportado")
 
 @app.post("/treinarModelo")
-async def treinamentoModelo():
+def treinamentoModelo():
     try:
-        await inicia_pre_processamento()
-        fasttext.supervised('dados/data.train.txt','modelo/modelo')
+        fill_db_tables()
+        # await inicia_pre_processamento()
+        # fasttext.supervised('dados/data.train.txt','modelo/modelo')
         return {"status":"Treinamento do modelo realizado com sucesso."}
-    except:
+    except Exception as e:
+        print(e)
         raise HTTPException(status_code=422, detail="Modelo não pôde ser treinado.")
 
 @app.post("/consultarGrupo")
