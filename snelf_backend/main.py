@@ -41,12 +41,16 @@ def treinamentoModelo():
 async def consultaGrupo(busca: str = Body(...)):
     try:
         array_from_product = get_transactions_from_product(busca)
+        transactions = array_from_product
         
         model = fasttext.load_model("modelo/modelo.bin")
         label = model.predict_proba([busca],k=1)[0][0][0]
         
         array_from_prediction = get_medicines_from_label(label)
-        transactions = array_from_product + array_from_prediction
+        # transactions = array_from_product + array_from_prediction[0:100]
+
+        print(label)
+        print(transactions)
         return { 'medicines': transactions }
 
     except Exception as e:
@@ -57,8 +61,7 @@ async def consultaGrupo(busca: str = Body(...)):
 async def consultaClean(busca: str = Body(...)):
     try:
         transactions = getTransactionsFromClean(busca)
-        print('transactions:')
-        print(transactions)
+        print(len(transactions))
         return { 'medicines': transactions }
     except Exception as e:
         print(e)
