@@ -4,10 +4,10 @@ import Navbar from '../components/navbar/Navbar';
 import { useState } from 'react';
 import Resultado from './Resultado';
 import LoadingSpinner from './LoadingSpinner';
+import {enviroment} from "../enviroment/enviroment";
 
-
-const CONSULTA_PRODUTO_ENDPOINT = `http://localhost:8000/consultarGrupo`;
-const CONSULTA_CLEAN_ENDPOINT = `http://localhost:8000/consultarClean`;
+const CONSULTA_PRODUTO_ENDPOINT = `${enviroment.backend_url}/consultarGrupo`;
+const CONSULTA_CLEAN_ENDPOINT = `${enviroment.backend_url}/consultarClean`;
 
 export default function Busca() {
     const [search, setSearch] = useState('');

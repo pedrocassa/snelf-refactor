@@ -3,8 +3,9 @@ import Navbar from '../components/navbar/Navbar'
 import { Alert, Box, Button, Grid, Typography } from '@mui/material'
 import { Link } from 'react-router-dom';
 import LoadingSpinner from './LoadingSpinner';
+import {enviroment} from "../enviroment/enviroment";
 
-const TREINAMENTO_ENDPOINT = `http://localhost:8000/treinarModelo`;
+const TREINAMENTO_ENDPOINT = `${enviroment.backend_url}/treinarModelo`;
 
 export default function TreinamentoModelo() {
 

@@ -2,9 +2,10 @@ import * as React from 'react';
 import { Alert, Box, Button, Grid, Paper, Typography } from '@mui/material';
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import LoadingSpinner from '../../pages/LoadingSpinner';
+import {enviroment} from "../../enviroment/enviroment";
 
 
-const IMPORTACAO_ENDPOINT = `http://localhost:8000/importarTransacoes`;
+const IMPORTACAO_ENDPOINT = `${enviroment.backend_url}/importarTransacoes`;
 
 export default function ImportacaoTransacaoForm() {
     const [csvFile, setCsvFile] = React.useState();
