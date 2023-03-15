@@ -1,4 +1,4 @@
 .vscode/
 .idea/
 snelf_backend/__pycache__/
-snelf_backend/__pycache__/
+*.pyc
