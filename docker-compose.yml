@@ -51,9 +51,9 @@ services:
       - COMPOSE_HTTP_TIMEOUT=120
 
 
-#volumes:
-#  snelf-data:
+volumes:
+  snelf-data:
   
- networks:
-    default:
-     name: snelf-network
+ #networks:
+ #   default:
+ #    name: snelf-network
