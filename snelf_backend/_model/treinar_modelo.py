@@ -2,15 +2,18 @@ import io
 import subprocess
 import time
 
-
 def pararTreinamentoModelo():
+    """
+    Responsável por parar o container do fasttext
+    """
+
     with open('_model/treinador.log', 'w') as f:
         f.close()
 
     with open('_model/treinador.log', 'w') as f:
         subprocess.Popen(['docker', 'stop', 'treinador'], stdout=f, stderr=f)
 
-        #aguarda o processo terminar, ou seja, enquanto não tiver linhas escritas ele confere. Faz isso até que seja escrita pelo menos uma linha no código. 
+        # aguarda o processo terminar, ou seja, enquanto não tiver linhas escritas ele confere. Faz isso até que seja escrita pelo menos uma linha no código.
         with open('_model/treinador.log', 'r') as f2:
             while len(f2.readlines()) == 0:
                 f2 = open('_model/treinador.log', 'r')
@@ -22,6 +25,12 @@ def pararTreinamentoModelo():
         f.close()
 
 def run(diretorio):
+    """
+    Responsável por iniciar o treinamento do fasttext
+
+    Essa função para qualquer treinamento que esteja em execução chamando a função :func:`pararTreinamentoModelo` antes de iniciar um novo treinamento.
+    """
+
     pararTreinamentoModelo()
 
     with open('_model/model.log', 'w') as f:

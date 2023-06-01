@@ -5,16 +5,21 @@ from fastapi import Body, FastAPI, File, UploadFile, Query, Request
 from fastapi.middleware import Middleware
 # from starlette.middleware.cors import CORSMiddleware
 from fastapi.middleware.cors import CORSMiddleware
-from Treinamento import Treinamento
+from treinamento import Treinamento
 from pre_processamento import inicia_pre_processamento
 import fasttext 
 from importar_csv_para_sql import fill_db_tables, insert_transactions, get_medicines_from_label, getTransactionsFromClean, get_transactions_from_product
 import pdb
 import unittest
 import numpy as np
+from fastapi.openapi.utils import get_openapi
 
 app = FastAPI(debug=True)
 treinamento = Treinamento()
+
+@app.get("/openapi.json")
+async def get_open_api_endpoint():
+    return get_openapi(title="Documentação do API", version="1.0", routes=app.routes)
 
 #rota de importação do csv. estudando como fazer para upload em csv maior
 @app.post("/importarCsv")
@@ -101,6 +106,19 @@ historico_status = []
 
 @app.post("/treinar-modelo-de-verdade")
 async def treinarModeloDeVerdade(forceRestart: bool = False):
+    """
+    Inicia/Retoma o treinamento do modelo.
+
+    :param forceRestart: Indica se o treinamento deve ser reiniciado do zero (True) ou continuar de onde parou (False).
+    :type forceRestart: bool
+    :return: Texto informativo. "Treinamento iniciado" ou  "Já existe um treinamento em andamento"
+    :rtype: str
+
+    Utiliza a função :meth:`treinamento.Treinamento.estaEmTreinamento` para verificar se existe um treinamento em andamento
+
+    Utiliza a função :meth:`treinamento.Treinamento.iniciarTreinamento` para iniciar o treinamento
+    """
+
     localDir = os.path.dirname(os.path.abspath(__file__))
     try:
         if not treinamento.estaEmTreinamento():
@@ -117,6 +135,12 @@ async def treinarModeloDeVerdade(forceRestart: bool = False):
 
 @app.post("/parar-treinamento")
 async def pararTreinamento():
+    """
+    Para o treinamento do modelo
+
+    Utiliza a função :meth:`treinamento.Treinamento.pararTreinamento` que parar o treinamento que está em andamento
+    """
+
     try:
         treinamento.pararTreinamento()
         return "Treinamento parado"
