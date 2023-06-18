@@ -9,11 +9,30 @@ import { useState, useEffect } from 'react';
 //const TREINAMENTO_ENDPOINT = `${enviroment.backend_url}/treinarModelo`; 
 const TREINAMENTO_ENDPOINT_TREINO = `${enviroment.backend_url}/treinar-modelo-de-verdade`;
 const TREINAMENTO_ENDPOINT_STATUS = `${enviroment.backend_url}/obter-status-treinamento`;
+const TREINAMENTO_ENDPOINT_PARAR_TREINO = `${enviroment.backend_url}/parar-treinamento`;
 
 export default function TreinamentoModelo() {
-    
+        
     const [resultMessage, setResultMessage] = React.useState();
     const [isLoading, setIsLoading] = React.useState(false);
+    //const [status, setStatus] = useState(null);
+    
+    const [statusList, setStatusList] = useState([]);
+
+    const getStatus = async () => {
+        try {
+            const response = await fetch(TREINAMENTO_ENDPOINT_STATUS);
+            const data = await response.json();
+            setStatusList(prevList => [...prevList, data]);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    
+    useEffect(() => {
+        const intervalId = setInterval(getStatus, 5000); // chamada à API a cada 5 segundos
+        return () => clearInterval(intervalId); // limpa o intervalo ao desmontar o componente
+    }, []);
     //const [status, setStatus] = useState(null);
     
     const [statusList, setStatusList] = useState([]);
@@ -37,11 +56,11 @@ export default function TreinamentoModelo() {
         e.preventDefault();
         setIsLoading(true);
         try{
-                await fetch(TREINAMENTO_ENDPOINT_TREINO , {
+                await fetch(TREINAMENTO_ENDPOINT_TREINO _TREINO , {
                     method: "POST",
                 })
-                .then(r => r.json().then(data => ({ status: r.status })))
-                .then(obj => {
+                    .then(r => r.json().then(data => ({ status: r.status })))
+                    .then(obj => {
                 if(obj.status===200){
                     setResultMessage(<Alert variant='filled' severity='success' onClose={() => {setResultMessage()}}>Treinamento iniciado com sucesso</Alert>);
                 }else{
@@ -56,6 +75,31 @@ export default function TreinamentoModelo() {
             setIsLoading(false);
         }
     };
+
+    
+    async function pararTreinoSubmit(e) {
+        e.preventDefault();
+        setIsLoading(true);
+        try {
+            await fetch(TREINAMENTO_ENDPOINT_PARAR_TREINO, {
+                method: "POST",
+            })
+                .then(r => r.json().then(data => ({ status: r.status })))
+                .then(obj => {
+                    if (obj.status === 200) {
+                        setResultMessage(<Alert variant='filled' severity='success' onClose={() => { setResultMessage(); } }>Treio parado</Alert>);
+                    } else {
+                        setResultMessage(<Alert variant='filled' severity='error' onClose={() => { setResultMessage(); } }>Não foi possível parar o treino. Código {obj.status}</Alert>);
+                    }
+                    setIsLoading(false);
+                    getStatus();
+
+                });
+
+        } catch (e) {
+            setIsLoading(false);
+        }
+    }
 
     return (
         <div>
@@ -87,6 +131,14 @@ export default function TreinamentoModelo() {
                             <Grid item>
                                 <Button component={Link} to={"/"} onClick={handleSubmit} disabled={isLoading} variant="contained">
                                     Treinar Modelo 
+                                </Button>
+                                &nbsp; &nbsp;
+                                <Button component={Link} to={"/"} onClick={pararTreinoSubmit} disabled ={isLoading} variant="contained">
+                                    Parar treinamento
+                                </Button>
+                                &nbsp;  &nbsp;
+                                <Button component={Link} to={"/"} onClick={handleSubmit} onclodisabled={isLoading} variant="contained">
+                                    Retomar treinamento 
                                 </Button>
                             </Grid>
                         </Box>
