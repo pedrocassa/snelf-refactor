@@ -96,7 +96,7 @@ async def root():
 async def importarTransacoes(csvFile: UploadFile = File(...)):
     if csvFile.filename.endswith('.csv'):
         insert_transactions(csvFile)
-
+        fill_db_tables()
         print("Arquivo importado com sucesso.")
         return {"filename": csvFile.filename, "status":"Arquivo importado com sucesso."}
     else:
