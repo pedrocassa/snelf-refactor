@@ -33,30 +33,12 @@ export default function TreinamentoModelo() {
         const intervalId = setInterval(getStatus, 5000); // chamada à API a cada 5 segundos
         return () => clearInterval(intervalId); // limpa o intervalo ao desmontar o componente
     }, []);
-    //const [status, setStatus] = useState(null);
-    
-    const [statusList, setStatusList] = useState([]);
-
-    const getStatus = async () => {
-        try {
-            const response = await fetch(TREINAMENTO_ENDPOINT_STATUS);
-            const data = await response.json();
-            setStatusList(prevList => [...prevList, data]);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-    
-    useEffect(() => {
-        const intervalId = setInterval(getStatus, 5000); // chamada à API a cada 5 segundos
-        return () => clearInterval(intervalId); // limpa o intervalo ao desmontar o componente
-    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         try{
-                await fetch(TREINAMENTO_ENDPOINT_TREINO _TREINO , {
+                await fetch(TREINAMENTO_ENDPOINT_TREINO, {
                     method: "POST",
                 })
                     .then(r => r.json().then(data => ({ status: r.status })))
