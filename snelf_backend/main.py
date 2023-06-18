@@ -122,7 +122,7 @@ async def treinarModeloDeVerdade(forceRestart: bool = False):
     localDir = os.path.dirname(os.path.abspath(__file__))
     try:
         if not treinamento.estaEmTreinamento():
-            treinamento.iniciarTreinamento(forceRestart)
+            treinamento.iniciarTreinamento(forceRestart=True)
             #print(historico_status)
             return "Treinamento iniciado"
         else:
