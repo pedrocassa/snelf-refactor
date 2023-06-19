@@ -146,7 +146,9 @@ async def pararTreinamento():
         return "Treinamento parado"
 
     except Exception as ex:
-        raise HTTPException(status_code=422, detail=ex)
+        print(ex)
+        return
+        # raise HTTPException(ex, status_code=422, detail=ex)
 
 
 

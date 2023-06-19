@@ -16,7 +16,7 @@ export default function Busca() {
     const [resultMessage, setResultMessage] = React.useState();
     const [searchType, setSearchType] = React.useState('selecione');
 
-    const page = 'busca';
+    //const page = 'busca';
 
     const handleSearchType = (e) => {
         e.preventDefault();
@@ -29,7 +29,7 @@ export default function Busca() {
         setIsLoading(true);
         let formData = new FormData();
         formData.append("stringBusca", search);
-        let chosenType = searchType == 'produto' ? CONSULTA_PRODUTO_ENDPOINT : CONSULTA_CLEAN_ENDPOINT;
+        let chosenType = searchType === 'produto' ? CONSULTA_PRODUTO_ENDPOINT : CONSULTA_CLEAN_ENDPOINT;
         //debugger;
         await fetch(chosenType, {
             method: "POST",
@@ -87,12 +87,12 @@ export default function Busca() {
 
                         <Box pt={7}>
                             <Grid style={{textAlign: "-webkit-center"}} item>
-                                <Button component="label" type="submit" onClick={handleSubmit} disabled={search == '' || ['selecione', ''].includes(searchType)} variant="contained">
+                                <Button component="label" type="submit" onClick={handleSubmit} disabled={search === '' || ['selecione', ''].includes(searchType)} variant="contained">
                                     Buscar
                                 </Button>
                             </Grid>
                         </Box>
-                {isLoading ? <LoadingSpinner /> : result.length != 0 ? <Resultado resultados={result} stringBusca={search} tipoBusca={searchType} /> : <div></div> }
+                {isLoading ? <LoadingSpinner /> : result.length !== 0 ? <Resultado resultados={result} stringBusca={search} tipoBusca={searchType} /> : <div></div> }
 
                 </Box>
             </Box>

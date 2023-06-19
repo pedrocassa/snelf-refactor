@@ -41,7 +41,7 @@ export default function TreinamentoModelo() {
                 await fetch(TREINAMENTO_ENDPOINT_TREINO, {
                     method: "POST",
                 })
-                    .then(r => r.json().then(data => ({ status: r.status })))
+                    .then(r => r.json().then(() => ({ status: r.status })))
                     .then(obj => {
                 if(obj.status===200){
                     setResultMessage(<Alert variant='filled' severity='success' onClose={() => {setResultMessage()}}>Treinamento iniciado com sucesso</Alert>);
@@ -61,15 +61,16 @@ export default function TreinamentoModelo() {
     
     async function pararTreinoSubmit(e) {
         e.preventDefault();
-        setIsLoading(true);
+        setIsLoading(false);
         try {
             await fetch(TREINAMENTO_ENDPOINT_PARAR_TREINO, {
                 method: "POST",
             })
-                .then(r => r.json().then(data => ({ status: r.status })))
+                .then(r => r.json().then(() => ({ status: r.status })))
                 .then(obj => {
+                    // console.log(obj);
                     if (obj.status === 200) {
-                        setResultMessage(<Alert variant='filled' severity='success' onClose={() => { setResultMessage(); } }>Treio parado</Alert>);
+                        setResultMessage(<Alert variant='filled' severity='success' onClose={() => { setResultMessage(); } }>Treino parado</Alert>);
                     } else {
                         setResultMessage(<Alert variant='filled' severity='error' onClose={() => { setResultMessage(); } }>Não foi possível parar o treino. Código {obj.status}</Alert>);
                     }
@@ -87,7 +88,7 @@ export default function TreinamentoModelo() {
         <div>
             <Navbar />
             {isLoading ? (<LoadingSpinner /> ) : 
-            (<Box p={{ xs: 8, sm: 6, md: 9 }} height='80vh' width='80vh' m="auto">
+            (<Box p={{ xs: 0, sm: 0, md: 3 }} height='80vh' width='120vh' m="auto">
                     <Grid
                         container
                         spacing={0}
@@ -95,13 +96,13 @@ export default function TreinamentoModelo() {
                         rowSpacing={1}
                         alignItems="center"
                     >
-                        <Box pt={5} pb={1} textAlign="center">
-                            <Typography variant="h3">
+                        <Box textAlign="center">
+                            <Typography variant="h4">
                                 Treinamento do Modelo
                             </Typography>
                         </Box>
 
-                        <Box p={2} pb={8} textAlign="center">
+                        <Box textAlign="center">
                             <Typography variant="h8">
                                 Clique abaixo para realizar o treinamento do modelo.
                                 Recomenda-se que novos treinamentos sejam realizados
@@ -109,7 +110,7 @@ export default function TreinamentoModelo() {
                             </Typography>
                         </Box>
 
-                        <Box pt={7}>
+                        <Box pt={3}>
                             <Grid item>
                                 <Button component={Link} to={"/"} onClick={handleSubmit} disabled={isLoading} variant="contained">
                                     Treinar Modelo 
