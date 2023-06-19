@@ -88,7 +88,7 @@ export default function TreinamentoModelo() {
         <div>
             <Navbar />
             {isLoading ? (<LoadingSpinner /> ) : 
-            (<Box p={{ xs: 0, sm: 0, md: 3 }} height='80vh' width='120vh' m="auto">
+            (<Box p={{ xs: 0, sm: 0, md: 3 }} height='80vh' width='130vh' m="auto">
                     <Grid
                         container
                         spacing={0}
@@ -134,6 +134,7 @@ export default function TreinamentoModelo() {
                 {statusList.length > 0 && (
                         <div style={{ borderRadius: "10px", padding: "10px", backgroundColor: "#B0C4DE" }}>
                             <Typography variant="h6">Status:</Typography>
+                            <br></br>
                             {statusList.slice(-3).map((status, index) => (
                                 <Typography key={index} variant="body1">{status}</Typography>
                             ))}
