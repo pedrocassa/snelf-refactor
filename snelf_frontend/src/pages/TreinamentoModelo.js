@@ -85,7 +85,7 @@ export default function TreinamentoModelo() {
     }
 
     return (
-        <div>
+        <>
             <Navbar />
             {isLoading ? (<LoadingSpinner /> ) : 
             (<Box p={{ xs: 0, sm: 0, md: 3 }} height='80vh' width='130vh' m="auto">
@@ -120,7 +120,7 @@ export default function TreinamentoModelo() {
                                     Parar treinamento
                                 </Button>
                                 &nbsp;  &nbsp;
-                                <Button component={Link} to={"/"} onClick={handleSubmit} onclodisabled={isLoading} variant="contained">
+                                <Button component={Link} to={"/"} onClick={handleSubmit} disabled={isLoading} variant="contained">
                                     Retomar treinamento 
                                 </Button>
                             </Grid>
@@ -144,6 +144,6 @@ export default function TreinamentoModelo() {
                 </Box>
             </Box>
             )}
-        </div>
+        </>
     );
 }

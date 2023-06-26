@@ -102,7 +102,7 @@ export function getResultPage(selectedPageId,dataset,setDataset,selectDataset) {
       />
     );
   } else {
-    return <div></div>;
+    return <></>;
   }
 }
 
@@ -138,7 +138,7 @@ export default function Resultado({ resultados, stringBusca, tipoBusca }) {
     setSelectedPageId(newSelectedPageId);
   };
   dados = resultados != null ? Object.keys(resultados).map((key) => resultados[key]) : [];
-  
+  // console.log(dados);
   const [dataset, setDataset] = React.useState(dados);
   const selectDataset = (event, newDataset) => {
     setDataset(newDataset);
@@ -147,8 +147,8 @@ export default function Resultado({ resultados, stringBusca, tipoBusca }) {
   
   
   return (
-    <div>
-      <Box pt={2} pb={4} textAlign="center">
+    <>
+      <Box pt={1} pb={4} textAlign="center">
         <Typography variant="h8">
           <Typography sx={{ fontWeight: "bold" }} variant="h8">
             {dataset ? `Resultado da busca pelo ${tipoBusca.toUpperCase()} "${stringBusca}"` : 'Resultado não encontrado.'}
@@ -165,7 +165,7 @@ export default function Resultado({ resultados, stringBusca, tipoBusca }) {
         </PDFDownloadLink>
 
         <Button variant="contained" color="success" onClick={() => handleExport(dados)} style={{margin: '10px'}} >Exportar Excel</Button>
-
+      
       </div>
 
       {/* Page Selector */}
@@ -184,10 +184,10 @@ export default function Resultado({ resultados, stringBusca, tipoBusca }) {
       </Box>
 
       {/* Resultado */}
-      <Box height="80vh" width="105%">
+      <Box height="80vh" width="100%">
         {getResultPage(selectedPageId, dataset, setDataset, selectDataset)}
       </Box>
 
-    </div>
+    </>
   );
 }

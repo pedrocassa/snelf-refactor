@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 
 export default function Home() {
     return (
-        <div>
+        <>
             <Navbar />
-            <Box p={{ xs: 8, sm: 6, md: 9 }} height='80vh' width='80vh' m="auto">
+            <Box p={{ xs: 0, sm: 0, md: 4 }} height='80vh' width='80vh' m="auto">
                 <Box pb={5}>
                     <Grid
                         container
@@ -16,18 +16,18 @@ export default function Home() {
                         rowSpacing={1}
                         alignItems="center"
                     >
-                        <Box pt={5} pb={1} textAlign="center">
+                        <Box pt={1} pb={1} textAlign="center">
                             <Typography variant="h3">
                                 SNELF
                             </Typography>
                         </Box>
 
-                        <Box p={2} pb={14} textAlign="center">
+                        <Box p={1} pb={7} textAlign="center">
                             <Typography variant="h8">
                             O SNELF é uma ferramenta para identificação disparidades em preços praticados em compras públicas.
                             </Typography>
                         </Box>
-
+                        
                         <Grid item>
                             <Button component={Link} to="/busca" variant="contained">
                                 Buscar Produto
@@ -36,6 +36,6 @@ export default function Home() {
                     </Grid>
                 </Box>
             </Box>
-        </div>
+        </>
     )
 }
