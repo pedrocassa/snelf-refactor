@@ -88,7 +88,7 @@ export default function TreinamentoModelo() {
         <>
             <Navbar />
             {isLoading ? (<LoadingSpinner /> ) : 
-            (<Box p={{ xs: 0, sm: 0, md: 3 }} height='80vh' width='130vh' m="auto">
+            (<Box p={{ xs: 0, sm: 0, md: 3 }} height='80vh' width='90%' m="auto">
                     <Grid
                         container
                         spacing={0}
