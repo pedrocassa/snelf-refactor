@@ -14,3 +14,6 @@ beautifulsoup4==4.11.1
 requests==2.28.1
 webdriver-manager
 pytest
+sphinx
+sphinxcontrib-napoleon
+sphinx_rtd_theme

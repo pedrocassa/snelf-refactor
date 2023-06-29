@@ -9,9 +9,10 @@ import { useState, useEffect } from 'react';
 //const TREINAMENTO_ENDPOINT = `${enviroment.backend_url}/treinarModelo`; 
 const TREINAMENTO_ENDPOINT_TREINO = `${enviroment.backend_url}/treinar-modelo-de-verdade`;
 const TREINAMENTO_ENDPOINT_STATUS = `${enviroment.backend_url}/obter-status-treinamento`;
+const TREINAMENTO_ENDPOINT_PARAR_TREINO = `${enviroment.backend_url}/parar-treinamento`;
 
 export default function TreinamentoModelo() {
-    
+        
     const [resultMessage, setResultMessage] = React.useState();
     const [isLoading, setIsLoading] = React.useState(false);
     //const [status, setStatus] = useState(null);
@@ -37,11 +38,11 @@ export default function TreinamentoModelo() {
         e.preventDefault();
         setIsLoading(true);
         try{
-                await fetch(TREINAMENTO_ENDPOINT_TREINO , {
+                await fetch(TREINAMENTO_ENDPOINT_TREINO, {
                     method: "POST",
                 })
-                .then(r => r.json().then(data => ({ status: r.status })))
-                .then(obj => {
+                    .then(r => r.json().then(() => ({ status: r.status })))
+                    .then(obj => {
                 if(obj.status===200){
                     setResultMessage(<Alert variant='filled' severity='success' onClose={() => {setResultMessage()}}>Treinamento iniciado com sucesso</Alert>);
                 }else{
@@ -57,11 +58,37 @@ export default function TreinamentoModelo() {
         }
     };
 
+    
+    async function pararTreinoSubmit(e) {
+        e.preventDefault();
+        setIsLoading(false);
+        try {
+            await fetch(TREINAMENTO_ENDPOINT_PARAR_TREINO, {
+                method: "POST",
+            })
+                .then(r => r.json().then(() => ({ status: r.status })))
+                .then(obj => {
+                    // console.log(obj);
+                    if (obj.status === 200) {
+                        setResultMessage(<Alert variant='filled' severity='success' onClose={() => { setResultMessage(); } }>Treino parado</Alert>);
+                    } else {
+                        setResultMessage(<Alert variant='filled' severity='error' onClose={() => { setResultMessage(); } }>Não foi possível parar o treino. Código {obj.status}</Alert>);
+                    }
+                    setIsLoading(false);
+                    getStatus();
+
+                });
+
+        } catch (e) {
+            setIsLoading(false);
+        }
+    }
+
     return (
-        <div>
+        <>
             <Navbar />
             {isLoading ? (<LoadingSpinner /> ) : 
-            (<Box p={{ xs: 8, sm: 6, md: 9 }} height='80vh' width='80vh' m="auto">
+            (<Box p={{ xs: 0, sm: 0, md: 3 }} height='80vh' width='90%' m="auto">
                     <Grid
                         container
                         spacing={0}
@@ -69,13 +96,13 @@ export default function TreinamentoModelo() {
                         rowSpacing={1}
                         alignItems="center"
                     >
-                        <Box pt={5} pb={1} textAlign="center">
-                            <Typography variant="h3">
+                        <Box textAlign="center">
+                            <Typography variant="h4">
                                 Treinamento do Modelo
                             </Typography>
                         </Box>
 
-                        <Box p={2} pb={8} textAlign="center">
+                        <Box textAlign="center">
                             <Typography variant="h8">
                                 Clique abaixo para realizar o treinamento do modelo.
                                 Recomenda-se que novos treinamentos sejam realizados
@@ -83,10 +110,18 @@ export default function TreinamentoModelo() {
                             </Typography>
                         </Box>
 
-                        <Box pt={7}>
+                        <Box pt={3}>
                             <Grid item>
                                 <Button component={Link} to={"/"} onClick={handleSubmit} disabled={isLoading} variant="contained">
                                     Treinar Modelo 
+                                </Button>
+                                &nbsp; &nbsp;
+                                <Button component={Link} to={"/"} onClick={pararTreinoSubmit} disabled ={isLoading} variant="contained">
+                                    Parar treinamento
+                                </Button>
+                                &nbsp;  &nbsp;
+                                <Button component={Link} to={"/"} onClick={handleSubmit} disabled={isLoading} variant="contained">
+                                    Retomar treinamento 
                                 </Button>
                             </Grid>
                         </Box>
@@ -99,6 +134,7 @@ export default function TreinamentoModelo() {
                 {statusList.length > 0 && (
                         <div style={{ borderRadius: "10px", padding: "10px", backgroundColor: "#B0C4DE" }}>
                             <Typography variant="h6">Status:</Typography>
+                            <br></br>
                             {statusList.slice(-3).map((status, index) => (
                                 <Typography key={index} variant="body1">{status}</Typography>
                             ))}
@@ -108,6 +144,6 @@ export default function TreinamentoModelo() {
                 </Box>
             </Box>
             )}
-        </div>
+        </>
     );
 }

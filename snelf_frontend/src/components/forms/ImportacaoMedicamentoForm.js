@@ -53,13 +53,13 @@ export default function ImportacaoMedicamentoForm() {
                         alignItems="center"
                     >
                         {isLoading ? <LoadingSpinner /> :  <div></div> }
-                        <Box pt={5} pb={1} textAlign="center">
-                            <Typography variant="h4">
+                        <Box pt={1} pb={1} textAlign="center">
+                            <Typography variant="h5">
                                 Importar Base de Dados de Medicamentos
                             </Typography>
                         </Box>
 
-                        <Box p={2} pb={5} textAlign="center">
+                        <Box p={1} pb={5} textAlign="center">
                             <Typography variant="h8">
                                 Importe aqui o arquivo CSV contendo a base de dados a ser utilizada para o treinamento do modelo de inferência.
                             </Typography>
@@ -75,7 +75,7 @@ export default function ImportacaoMedicamentoForm() {
                         </Typography>
 
                         <Grid item>
-                            <Typography variant='h5'>
+                            <Typography variant='h6'>
                                 {filename}
                             </Typography>
                         </Grid>

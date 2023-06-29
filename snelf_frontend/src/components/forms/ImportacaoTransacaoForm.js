@@ -52,15 +52,15 @@ export default function ImportacaoTransacaoForm() {
                         rowSpacing={1}
                         alignItems="center"
                     >
-                        <Box pt={5} pb={1} textAlign="center">
-                            <Typography variant="h4">
+                        <Box pt={1} pb={1} textAlign="center">
+                            <Typography variant="h5">
                                 Importar Base de Dados de Transações
                             </Typography>
                         </Box>
 
                         {isLoading ? <LoadingSpinner /> :  <div></div> }
 
-                        <Box p={2} pb={14} alignSelf="flex-start" textAlign="center">
+                        <Box p={1} pb={4} alignSelf="flex-start" textAlign="center">
                             <Typography variant="h8">
                                 Importe aqui o arquivo CSV contendo a base de dados a ser utilizada para o treinamento do modelo de inferência.
                             </Typography>
@@ -82,7 +82,7 @@ export default function ImportacaoTransacaoForm() {
                         </div>
 
                         <Grid item>
-                            <Typography variant='h5'>
+                            <Typography variant='h6'>
                                 {filename}
                             </Typography>
                         </Grid>
