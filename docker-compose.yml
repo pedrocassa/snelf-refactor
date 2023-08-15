@@ -11,7 +11,7 @@ services:
       POSTGRES_USER: testejp
       POSTGRES_PASSWORD: testejp
     ports:
-      - 5432:5432
+      - 54320:5432
     volumes:
       - ./init-scripts/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
       - snelf-data:/var/lib/postgresql/data
@@ -27,9 +27,15 @@ services:
     volumes:
       - ./snelf_backend:/back_app
     ports:
-      - 8000:8000
+      - 8001:8000
     depends_on:
       - snelf-postgres
+
+  fasttext:
+    build: ./snelf_backend/_model
+    container_name: fasttext
+    volumes:
+      - ./:/fasttext
 
   snelf-front:
     build: ./snelf_frontend
@@ -54,6 +60,6 @@ services:
 volumes:
   snelf-data:
   
-# networks:
-#   default:
-#     name: snelf-network
+ #networks:
+ #   default:
+ #    name: snelf-network

@@ -5,7 +5,8 @@ import psycopg2
 import pdb
 from datetime import datetime
 from queries import insert_produtos, insert_products_transactions, insert_classes, insert_products_classes
-
+from infra.DBConnection import DBConnection
+db = DBConnection()
 
 def fill_db_tables():
     print('Começou')
@@ -20,9 +21,7 @@ def fill_db_tables():
 
 
 def insert_transactions(csvFile):
-    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
-    connection.autocommit=True
-    cursor = connection.cursor()
+    global db
     
     cols = ["CodigoNFe","DataEmissao","MunicipioEmitente","unidadecomercial","quantidadecomercial","valorunitariocomercial","DescricaoProduto","CLEAN"]
     df = pd.read_csv(csvFile.file, usecols=cols, dtype={0:int, 1: str, 2:str, 3:str, 4:float, 5:float, 6:str, 7:str}, sep=',')
@@ -49,19 +48,16 @@ def insert_transactions(csvFile):
     sql = "INSERT INTO transactions(CodigoNFe,DataEmissao,MunicipioEmitente,unidadecomercial,quantidadecomercial,valorunitariocomercial,DescricaoProduto,CLEAN) VALUES "
     
     
-    cursor.execute(sql + (args))
+    db.cursor.execute(sql + (args))
     
-    connection.commit()
+    db.connection.commit()
 
-    connection.close()
 
 
 
 # Método para população da Tabela classes
 def fill_classes_table():
-    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
-    connection.autocommit=True
-    cursor = connection.cursor()
+    global db
     
     inputArray = []
     
@@ -75,16 +71,13 @@ def fill_classes_table():
     
     args = ','.join(f"('{i}')" for i in inputArray)
     sql = "INSERT INTO classes(class_label) VALUES "    
-    cursor.execute(sql + (args))
+    db.cursor.execute(sql + (args))
     
-    connection.commit()
-    connection.close()
+    db.connection.commit()
 
 
 def fill_products_classes_table():
-    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
-    connection.autocommit=True
-    cursor = connection.cursor()
+    global db
     
     inputArray = []
     training_file = open('./dados/data.train.txt', 'r')
@@ -100,38 +93,32 @@ def fill_products_classes_table():
     for input in inputArray:
         arg = str(input)
         print(sql + arg)
-        cursor.execute(sql + arg)
+        db.cursor.execute(sql + arg)
 
-    connection.commit()
-    connection.close()
+    db.connection.commit()
 
 
 def get_all_medicine_expanded_df():
-    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
-    connection.autocommit=True
-    cursor = connection.cursor()
+    global db
     sql_table_creation = "SELECT mt.DescricaoProduto, mt.CLEAN FROM transactions mt"
-    cursor.execute(sql_table_creation)
+    db.cursor.execute(sql_table_creation)
 
-    medicine_transactions_records = cursor.fetchall()
+    medicine_transactions_records = db.cursor.fetchall()
     medicine_transactions_dataframe = pd.DataFrame(medicine_transactions_records, columns=["DescricaoProduto","CLEAN"])
 
-    connection.commit()
-    connection.close()
+    db.connection.commit()
     
     return medicine_transactions_dataframe
 
 def getTransactionsFromClean(busca):
-    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
-    connection.autocommit=True
-    cursor = connection.cursor()
+    global db
     sql_table_creation = f"""select *
                              from transactions t 
                              where clean like '%{busca}%'"""
 
-    cursor.execute(sql_table_creation)
+    db.cursor.execute(sql_table_creation)
 
-    medicine_transactions_consulted = cursor.fetchall()
+    medicine_transactions_consulted = db.cursor.fetchall()
     
     medicines_object = []
     for transaction in medicine_transactions_consulted:
@@ -150,22 +137,20 @@ def getTransactionsFromClean(busca):
     print('medicines_object')
     print(medicines_object)
 
-    connection.commit()
-    connection.close()
+    db.connection.commit()
     
     return medicines_object
 
 def get_transactions_from_product(busca):
-    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
-    connection.autocommit=True
-    cursor = connection.cursor()
+    global db
+
     sql_table_creation = f"""select t.*
                             from transactions t
-                            where t.descricaoproduto like '%{busca}%'"""
+                            where LOWER(t.descricaoproduto) like LOWER('%{busca}%')"""
 
-    cursor.execute(sql_table_creation)
+    db.cursor.execute(sql_table_creation)
 
-    medicine_transactions_consulted = cursor.fetchall()
+    medicine_transactions_consulted = db.cursor.fetchall()
     
     medicines_object = []
     for transaction in medicine_transactions_consulted:
@@ -181,16 +166,13 @@ def get_transactions_from_product(busca):
             'CLEAN': transaction[8]
         })
 
-    connection.commit()
-    connection.close()
+    db.connection.commit()
     
     return medicines_object
 
 
 def get_medicines_from_label(label):
-    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
-    connection.autocommit=True
-    cursor = connection.cursor()
+    global db
     sql_table_creation = f"""select t.*
                             from products_classes pc
                             join classes c 
@@ -201,9 +183,9 @@ def get_medicines_from_label(label):
                             join transactions t
                                 on t.id=pt.id_transaction"""
 
-    cursor.execute(sql_table_creation)
+    db.cursor.execute(sql_table_creation)
 
-    medicine_transactions_consulted = cursor.fetchall()
+    medicine_transactions_consulted = db.cursor.fetchall()
     
     medicines_object = []
     for transaction in medicine_transactions_consulted:
@@ -219,31 +201,27 @@ def get_medicines_from_label(label):
             'CLEAN': transaction[8]
         })
 
-    connection.commit()
-    connection.close()
+    db.connection.commit()
     
     return medicines_object
 
 def get_limited_medicines_with_clean():
-    connection = psycopg2.connect(database="testejp", user="testejp", password="testejp", host="snelf-postgres", port="5432")
-    connection.autocommit=True
-    cursor = connection.cursor()
+    global db
     sql_table_creation = f"""select distinct descricaoproduto, clean
                              from transactions
                              where clean NOT in ('', 'N/I', '-1', '0')
                              order by clean desc
                              limit 1000"""
 
-    cursor.execute(sql_table_creation)
+    db.cursor.execute(sql_table_creation)
 
-    medicine_transactions_with_clean = cursor.fetchall()
+    medicine_transactions_with_clean = db.cursor.fetchall()
     
     medicine_transactions_dataframe = pd.DataFrame(medicine_transactions_with_clean, columns=["DescricaoProduto","CLEAN"])
 
     print(medicine_transactions_dataframe)
     
-    connection.commit()
-    connection.close()
+    db.connection.commit()
     
     return medicine_transactions_dataframe
 

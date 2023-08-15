@@ -254,7 +254,7 @@ export default function EnhancedTable({ dataset, setDataset, selectDataset }) {
   const [orderBy, setOrderBy] = React.useState("nome");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
+  const [dense, setDense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
   const [searchString, setSearchString] = React.useState("");
   const [rows, setRows] = React.useState(JSON.parse(JSON.stringify(dataset)));

@@ -4,10 +4,10 @@ import Navbar from '../components/navbar/Navbar';
 import { useState } from 'react';
 import Resultado from './Resultado';
 import LoadingSpinner from './LoadingSpinner';
+import {enviroment} from "../enviroment/enviroment";
 
-
-const CONSULTA_PRODUTO_ENDPOINT = `http://localhost:8000/consultarGrupo`;
-const CONSULTA_CLEAN_ENDPOINT = `http://localhost:8000/consultarClean`;
+const CONSULTA_PRODUTO_ENDPOINT = `${enviroment.backend_url}/consultarGrupo`;
+const CONSULTA_CLEAN_ENDPOINT = `${enviroment.backend_url}/consultarClean`;
 
 export default function Busca() {
     const [search, setSearch] = useState('');
@@ -15,8 +15,6 @@ export default function Busca() {
     const [isLoading, setIsLoading] = React.useState(false);
     const [resultMessage, setResultMessage] = React.useState();
     const [searchType, setSearchType] = React.useState('selecione');
-
-    const page = 'busca';
 
     const handleSearchType = (e) => {
         e.preventDefault();
@@ -29,8 +27,8 @@ export default function Busca() {
         setIsLoading(true);
         let formData = new FormData();
         formData.append("stringBusca", search);
-        let chosenType = searchType == 'produto' ? CONSULTA_PRODUTO_ENDPOINT : CONSULTA_CLEAN_ENDPOINT;
-        debugger;
+        let chosenType = searchType === 'produto' ? CONSULTA_PRODUTO_ENDPOINT : CONSULTA_CLEAN_ENDPOINT;
+        //debugger;
         await fetch(chosenType, {
             method: "POST",
             body: search
@@ -51,17 +49,17 @@ export default function Busca() {
 
 
     return (
-        <div>
+        <>
             <Navbar />
-            <Box p={{ xs: 8, sm: 6, md: 9 }} height='80vh' width='90%' m="auto">
+            <Box p={{ xs: 0, sm: 0, md: 3 }} height='80vh' width='90%' m="auto">
                 <Box pb={5}>
-                        <Box pt={5} pb={1} textAlign="center">
-                            <Typography variant="h3">
+                        <Box pt={1} pb={1} textAlign="center">
+                            <Typography variant="h4">
                                 Busca
                             </Typography>
                         </Box>
 
-                        <Box p={2} pb={8} textAlign="center">
+                        <Box p={1} pb={4} textAlign="center">
                             <Typography variant="h8">
                                 Digite o nome do produto desejado:
                             </Typography>
@@ -85,17 +83,17 @@ export default function Busca() {
                         
                         <TextField onChange={(event) => setSearch(event.target.value)} fullWidth label="Insira o nome do produto" id="fullWidth" />
 
-                        <Box pt={7}>
+                        <Box pt={3}>
                             <Grid style={{textAlign: "-webkit-center"}} item>
-                                <Button component="label" type="submit" onClick={handleSubmit} disabled={search == '' || ['selecione', ''].includes(searchType)} variant="contained">
+                                <Button component="label" type="submit" onClick={handleSubmit} disabled={search === '' || ['selecione', ''].includes(searchType)} variant="contained">
                                     Buscar
                                 </Button>
                             </Grid>
                         </Box>
-                {isLoading ? <LoadingSpinner /> : result.length != 0 ? <Resultado resultados={result} stringBusca={search} tipoBusca={searchType} /> : <div></div> }
+                {isLoading ? <LoadingSpinner /> : result.length !== 0 ? <Resultado resultados={result} stringBusca={search} tipoBusca={searchType} /> : <div></div> }
 
                 </Box>
             </Box>
-        </div>
+        </>
     )
 }
