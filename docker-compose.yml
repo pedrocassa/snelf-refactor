@@ -48,7 +48,7 @@ services:
       - ./snelf_frontend:/front_app
       - /front_app/node_modules
     ports:
-      - 7767:7767
+      - 7767:3000
     depends_on:
       - snelf-back
     command: npm run start
