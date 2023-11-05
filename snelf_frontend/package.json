@@ -2,6 +2,7 @@
   "name": "snelf-frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://dal.eic.cefet-rj.br/snelf/",
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
@@ -27,6 +28,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build-prod": "pm2 serve build 3000 -spa",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
