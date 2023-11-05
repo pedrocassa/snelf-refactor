@@ -48,7 +48,7 @@ services:
       - ./snelf_frontend:/front_app
       - /front_app/node_modules
     ports:
-      - 7767:3000
+      - 7767:80
     depends_on:
       - snelf-back
     environment:
