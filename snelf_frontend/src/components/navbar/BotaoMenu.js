@@ -42,10 +42,10 @@ export default function BotaoMenu() {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem component={Link} to={'/importacaoTransacao'} onClick={handleClose}><ImportExportIcon className='iconeMenu' />Importar Base de Transações</MenuItem>
-        <MenuItem component={Link} to={'/treinamentoModelo'} onClick={handleClose}><ImportExportIcon className='iconeMenu' />Atualizar Treinamento do Modelo</MenuItem>
-        <MenuItem component={Link} to={'/busca'} onClick={handleClose}><SearchIcon className='iconeMenu' />Buscar Produtos</MenuItem>
-        <MenuItem component={Link} to={'/sobre'} onClick={handleClose}><InfoIcon className='iconeMenu' />Sobre o Projeto</MenuItem>
+        <MenuItem component={Link} to={'/snelf/importacaoTransacao'} onClick={handleClose}><ImportExportIcon className='iconeMenu' />Importar Base de Transações</MenuItem>
+        <MenuItem component={Link} to={'/snelf/treinamentoModelo'} onClick={handleClose}><ImportExportIcon className='iconeMenu' />Atualizar Treinamento do Modelo</MenuItem>
+        <MenuItem component={Link} to={'/snelf/busca'} onClick={handleClose}><SearchIcon className='iconeMenu' />Buscar Produtos</MenuItem>
+        <MenuItem component={Link} to={'/snelf/sobre'} onClick={handleClose}><InfoIcon className='iconeMenu' />Sobre o Projeto</MenuItem>
 
       </Menu>
 
