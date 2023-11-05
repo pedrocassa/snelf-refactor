@@ -20,13 +20,13 @@ const root = ReactDOM.createRoot(
 root.render(
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="importacaoMedicamento" element={<ImportacaoMedicamento />} />
-                <Route path="importacaoTransacao" element={<ImportacaoTransacao/>}/>
-                <Route path="treinamentoModelo" element={<TreinamentoModelo/>}/>
-                <Route path="busca" element={<Busca />} />
-                <Route path="sobre" element={<Sobre />} />
-                <Route path="resultado" element={<Resultado />} />
+                <Route path="/snelf" element={<Home />} />
+                <Route path="/snelf/importacaoMedicamento" element={<ImportacaoMedicamento />} />
+                <Route path="/snelf/importacaoTransacao" element={<ImportacaoTransacao/>}/>
+                <Route path="/snelf/treinamentoModelo" element={<TreinamentoModelo/>}/>
+                <Route path="/snelf/busca" element={<Busca />} />
+                <Route path="/snelf/sobre" element={<Sobre />} />
+                <Route path="/snelf/resultado" element={<Resultado />} />
             </Routes>
         </BrowserRouter>
 );
