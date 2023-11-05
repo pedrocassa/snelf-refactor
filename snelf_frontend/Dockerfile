@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:14-alpine as builder
 
 WORKDIR /front_app
 
@@ -11,13 +11,23 @@ RUN npm install \
     && npm i react-plotly.js plotly.js \
     && npm i @react-pdf/renderer --save \
     && npm i assert --save \
-    && npm i xlsx
-
+    && npm i xlsx 
 
 COPY ./ .
 
 RUN npm run build
 
-EXPOSE 3000
+# Bundle static assets with nginx
+FROM nginx:1.21.0-alpine as production
 
-CMD ["npm","start"]
+ENV NODE_ENV production
+# Copy built assets from `builder` image
+COPY --from=builder /front_app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+
+
