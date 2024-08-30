@@ -2,4 +2,7 @@
 .idea/
 snelf_backend/__pycache__/
 snelf_backend/lib/__pycache__/
+
+./snelf_new_frontend/node_modules
+
 *.pyc

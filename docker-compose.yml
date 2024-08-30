@@ -1,5 +1,5 @@
 # Use postgres/example user/password credentials
-version: '3.1'
+#version: '3.1'
 
 services:
   snelf-postgres:
@@ -16,20 +16,20 @@ services:
       - ./init-scripts/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
       - snelf-data:/var/lib/postgresql/data
 
-  snelf-back:
-    build: ./snelf_backend
-    container_name: snelf-back
-    environment:
-      - DB_SERVER=snelf-postgres
-      - POSTGRES_DB=testejp
-      - POSTGRES_USER=testejp
-      - POSTGRES_PASSWORD=testejp
-    volumes:
-      - ./snelf_backend:/back_app
-    ports:
-      - 7768:8000
-    depends_on:
-      - snelf-postgres
+  #snelf-back:
+  #  build: ./snelf_backend
+  #  container_name: snelf-back
+  #  environment:
+  #    - DB_SERVER=snelf-postgres
+  #    - POSTGRES_DB=testejp
+  #    - POSTGRES_USER=testejp
+  #    - POSTGRES_PASSWORD=testejp
+  #  volumes:
+  #    - ./snelf_backend:/back_app
+  #  ports:
+  #    - 7768:8000
+  #  depends_on:
+  #    - snelf-postgres
 
   fasttext:
     build: ./snelf_backend/_model
@@ -37,23 +37,23 @@ services:
     volumes:
       - ./:/fasttext
 
-  snelf-front:
-    build: ./snelf_frontend
-    container_name: snelf-front
-    stdin_open: true
-    # Mount our host directory to the docker container
-    # Mount (.) current directory to the docker container code/snelf-frontend
-    # Reflect file changes from host to container
-    volumes:
-      - ./snelf_frontend:/front_app
-      - /front_app/node_modules
-    ports:
-      - 7767:80
-    depends_on:
-      - snelf-back
-    environment:
-      - DOCKER_CLIENT_TIMEOUT=120
-      - COMPOSE_HTTP_TIMEOUT=120
+  #snelf-front:
+  #  build: ./snelf_frontend
+  #  container_name: snelf-front
+  #  stdin_open: true
+  #  # Mount our host directory to the docker container
+  #  # Mount (.) current directory to the docker container code/snelf-frontend
+  #  # Reflect file changes from host to container
+  #  volumes:
+  #    - ./snelf_frontend:/front_app
+  #    - /front_app/node_modules
+  #  ports:
+  #    - 7767:80
+  #  depends_on:
+  #    - snelf-back
+  #  environment:
+  #    - DOCKER_CLIENT_TIMEOUT=120
+  #    - COMPOSE_HTTP_TIMEOUT=120
 
 
 volumes:
