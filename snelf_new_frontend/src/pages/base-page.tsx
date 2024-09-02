@@ -1,20 +1,11 @@
-import { Button, Grid, List, ListItem, ListItemText, Typography } from "@mui/material"
+import { Button, Card, CardActions, CardContent, CardHeader, Typography } from "@mui/material"
 import { FlexContainer } from "../components/ui/flex-container"
-import { cloneElement } from "react";
+import { observer } from "mobx-react"
+import { useContext } from "react"
+import { RootStoreContext } from "../stores/root-store"
 
-const columns = [
-    'CodigoNFe',
-    'DataEmissao',
-    'MunicipioEmitente',
-    'unidadecomercial',
-    'quantidadecomercial',
-    'valorunitariocomercial',
-    'DescricaoProduto',
-    'CLEAN'
-]
-
-// adicionar responsividade
-export const BasePage = () => {
+export const BasePage = observer(() => {
+    const rootStore = useContext(RootStoreContext);
 
     return (
         <FlexContainer
@@ -22,54 +13,29 @@ export const BasePage = () => {
                 width: '100%',
                 height: '100%',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
             }}
         >
-            <FlexContainer
-                sx={{
-                    height: '70%',
-                    width: '50%',
-                    flexDirection: 'column',
-                    boxShadow: '9',
-                    borderRadius: 2,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    position: 'relative'
-                }}
-            >
-                <Typography
-                    sx={{
-                        textAlign: 'center',
-                        fontSize: 50,
-                        fontWeight: 700
-                    }}
-                >
-                    Importar Base de Dados de Transações
-                </Typography>
-                <Typography textAlign={'center'} fontWeight={500}>
-                    Importe aqui o arquivo CSV contendo a
-                    base de dados a ser utilizada para o treinamento do modelo de inferência.
-                </Typography>
-                <Typography textAlign={'center'} fontWeight={500}>
-                    Arquivo deve conter registros separados por vírgulas, contendo as seguintes colunas:
-                </Typography>
-                <FlexContainer flexDirection={'column'} marginTop={'5%'} marginBottom={'15%'}>
-                    {
-                        columns.map((column) => <Typography> - {column}</Typography>)
-                    }
-                </FlexContainer>
-                <FlexContainer
-                    sx={{
-                        justifyContent: 'space-around',
-                        width: '100%',
-                        position: 'absolute',
-                        bottom: 50
-                    }}
-                >
-                    <Button variant="contained" sx={{ maxWidth: '20%' }}>UPLOAD CSV</Button>
-                    <Button variant="contained" sx={{ maxWidth: '20%' }}>IMPORTAR</Button>
-                </FlexContainer>
-            </FlexContainer>
+            <Card elevation={10} sx={{
+                width: { xs: '90%', md: '80%', lg: '70%' }
+            }}>
+                <CardHeader title="Importar Base de Dados de Transações" subheader="Importe aqui o arquivo CSV contendo a
+                        base de dados a ser utilizada para o treinamento do modelo de inferência." />
+                <CardContent>
+                    <Typography textAlign={'center'} fontWeight={'bold'}>
+                        Arquivo deve conter registros separados por vírgulas, contendo as seguintes colunas:
+                    </Typography>
+                    <FlexContainer flexDirection={'column'}>
+                        {
+                            rootStore && rootStore.baseStore && rootStore.baseStore.columns.map((column) => <Typography> - {column}</Typography>)
+                        }
+                    </FlexContainer>
+                </CardContent>
+                <CardActions sx={{ justifyContent: 'flex-end' }}>
+                    <Button variant="contained">UPLOAD CSV</Button>
+                    <Button variant="contained">IMPORTAR</Button>
+                </CardActions>
+            </Card>
         </FlexContainer>
     )
-}
+})

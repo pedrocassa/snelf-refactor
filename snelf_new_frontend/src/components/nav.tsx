@@ -1,5 +1,4 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -7,11 +6,8 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import Logo from '../assets/s_logo.png'
 import { FlexContainer } from './ui/flex-container';
 
@@ -38,7 +34,7 @@ function ResponsiveAppBar() {
                             justifyContent: 'center'
                         }}
                     >
-                        <img src={Logo} width={'20%'} style={{ borderRadius: 100 }} />
+                        <img src={Logo} alt="logo" width={'20%'} style={{ borderRadius: 100 }} />
                     </FlexContainer>
 
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -81,7 +77,7 @@ function ResponsiveAppBar() {
                             justifyContent: 'center'
                         }}
                     >
-                        <img src={Logo} width={'5%'} style={{ borderRadius: 100 }} />
+                        <img src={Logo} alt="logo" width={'5%'} style={{ borderRadius: 100 }} />
                     </FlexContainer>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
