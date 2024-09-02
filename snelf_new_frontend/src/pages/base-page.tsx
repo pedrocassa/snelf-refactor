@@ -1,11 +1,32 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Typography } from "@mui/material"
+import { Button, Card, CardActions, CardContent, CardHeader, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material"
 import { FlexContainer } from "../components/ui/flex-container"
 import { observer } from "mobx-react"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { RootStoreContext } from "../stores/root-store"
+import { toJS } from "mobx"
 
 export const BasePage = observer(() => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [file, setFile] = useState<File | undefined>(undefined);
+
     const rootStore = useContext(RootStoreContext);
+
+    const baseStore = rootStore?.baseStore;
+
+    const columns = baseStore?.columns;
+
+    const handleOpenDialog = () => setIsOpen(true);
+    const handleCloseDialog = () => setIsOpen(false);
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+
+        if(file) setFile(file);
+    }
+
+    const handleImportCSV = () => {
+        if(file) baseStore?.importCsv(file);
+    }
 
     return (
         <FlexContainer
@@ -25,17 +46,26 @@ export const BasePage = observer(() => {
                     <Typography textAlign={'center'} fontWeight={'bold'}>
                         Arquivo deve conter registros separados por vírgulas, contendo as seguintes colunas:
                     </Typography>
-                    <FlexContainer flexDirection={'column'}>
+                    <FlexContainer flexDirection={'column'} marginTop={1}>
                         {
-                            rootStore && rootStore.baseStore && rootStore.baseStore.columns.map((column) => <Typography> - {column}</Typography>)
+                            columns?.map((column) => <Typography key={column}> - {column}</Typography>)
                         }
                     </FlexContainer>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'flex-end' }}>
-                    <Button variant="contained">UPLOAD CSV</Button>
-                    <Button variant="contained">IMPORTAR</Button>
+                    <Button variant="contained" onClick={handleOpenDialog}>IMPORTAR</Button>
                 </CardActions>
             </Card>
+
+            <Dialog open={isOpen} onClose={handleCloseDialog}>
+                <DialogTitle>Importar Base de Dados</DialogTitle>
+                <DialogContent>
+                    <input type="file" onChange={handleFileChange} />
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="contained" onClick={handleImportCSV}>IMPORTAR</Button>
+                </DialogActions>
+            </Dialog>
         </FlexContainer>
     )
 })
