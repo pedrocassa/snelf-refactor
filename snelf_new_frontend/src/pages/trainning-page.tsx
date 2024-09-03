@@ -1,16 +1,13 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material"
 import { FlexContainer } from "../components/ui/flex-container"
-import { useContext, useState } from "react";
-import { RootStoreContext } from "../stores/root-store";
+import { useState } from "react";
 import { observer } from "mobx-react";
+import useStore from "../core/mobx/use-store";
 
 export const TrainningPage = observer(() => {
     const [isOpen, setIsOpen] = useState(false);
     const [file, setFile] = useState<File | undefined>(undefined);
-
-    const rootStore = useContext(RootStoreContext);
-
-    const trainningStore = rootStore?.trainningStore;
+    const { trainningStore } = useStore()
 
     const handleOpenDialog = () => setIsOpen(true);
     const handleCloseDialog = () => setIsOpen(false);
@@ -22,7 +19,7 @@ export const TrainningPage = observer(() => {
     }
     
     const handleStartTrainning = () => {
-        trainningStore?.startModelTrainning({ csv_file: file, forceRestart: !file });
+        trainningStore?.startModelTrainning(file, !file );
     }
     
     const handleStopTrainning = () => {

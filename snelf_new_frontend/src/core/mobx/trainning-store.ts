@@ -34,12 +34,12 @@ class TrainningStore {
     this.status = status;
   };
 
-  startModelTrainning = async (data: { csv_file?: File; forceRestart?: boolean }) => {
+  startModelTrainning = async (csvFile?: File, forceRestart?: boolean) => {
     this.setLoading(true);
     this.setError(null);
 
     try {
-      const response = await trainningService.startModelTrainning(data);
+      const response = await trainningService.startTrainning(csvFile, forceRestart);
 
       runInAction(() => {
         this.setStatus(response.data.status);
@@ -61,7 +61,7 @@ class TrainningStore {
     this.setLoading(true);
     this.setError(null);
     try {
-      await trainningService.stopModelTrainning();
+      await trainningService.stopTrainning();
       runInAction(() => {
         this.setStatus("Treinamento parado com sucesso.");
       });
@@ -80,7 +80,7 @@ class TrainningStore {
     this.setLoading(true);
     this.setError(null);
     try {
-      const response = await trainningService.getModelTrainningStatus();
+      const response = await trainningService.getTrainningStatus();
       runInAction(() => {
         this.setStatus(response.data);
       });
@@ -96,4 +96,4 @@ class TrainningStore {
   };
 }
 
-export default TrainningStore;
+export const trainningStore = new TrainningStore();

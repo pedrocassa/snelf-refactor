@@ -2,18 +2,11 @@ import { Button, Card, CardActions, CardContent, CardHeader, Dialog, DialogActio
 import { FlexContainer } from "../components/ui/flex-container"
 import { observer } from "mobx-react"
 import { useContext, useState } from "react"
-import { RootStoreContext } from "../stores/root-store"
 import { toJS } from "mobx"
 
 export const BasePage = observer(() => {
     const [isOpen, setIsOpen] = useState(false);
     const [file, setFile] = useState<File | undefined>(undefined);
-
-    const rootStore = useContext(RootStoreContext);
-
-    const baseStore = rootStore?.baseStore;
-
-    const columns = baseStore?.columns;
 
     const handleOpenDialog = () => setIsOpen(true);
     const handleCloseDialog = () => setIsOpen(false);
@@ -22,10 +15,6 @@ export const BasePage = observer(() => {
         const file = event.target.files?.[0];
 
         if(file) setFile(file);
-    }
-
-    const handleImportCSV = () => {
-        if(file) baseStore?.importCsv(file);
     }
 
     return (
@@ -46,11 +35,6 @@ export const BasePage = observer(() => {
                     <Typography textAlign={'center'} fontWeight={'bold'}>
                         Arquivo deve conter registros separados por vírgulas, contendo as seguintes colunas:
                     </Typography>
-                    <FlexContainer flexDirection={'column'} marginTop={1}>
-                        {
-                            columns?.map((column) => <Typography key={column}> - {column}</Typography>)
-                        }
-                    </FlexContainer>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'flex-end' }}>
                     <Button variant="contained" onClick={handleOpenDialog}>IMPORTAR</Button>
@@ -63,7 +47,7 @@ export const BasePage = observer(() => {
                     <input type="file" onChange={handleFileChange} />
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="contained" onClick={handleImportCSV}>IMPORTAR</Button>
+                    <Button variant="contained" onClick={() => console.log(123)}>IMPORTAR</Button>
                 </DialogActions>
             </Dialog>
         </FlexContainer>

@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Logo from '../assets/s_logo.png'
 import { FlexContainer } from './ui/flex-container';
 
-const pages = [['Home', '/'], ['Base', '/base'], ['Treinamento', '/training'], ['Produtos', '/products']];
+const pages = [['Home', '/'], ['Base', '/base'], ['Treinamento', '/training'], ['Medicamentos', '/medicines'], ['Suprimentos', '/supplies']];
 
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
