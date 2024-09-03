@@ -10,3 +10,12 @@ class SuprimentosDao(BaseDAO):
         query = query_base + query_valores
         valores = [item for sublista in suprimentos for item in sublista]
         return self.insert(query, valores)
+    
+    def consultar_pela_descricao(self, busca, offset, limit):
+        query = f""" SELECT * 
+                    FROM suprimentos 
+                    WHERE LOWER(descricao) LIKE LOWER('%{busca}%')
+                    LIMIT {limit}
+                    OFFSET {offset}
+                """
+        return self.select(query)

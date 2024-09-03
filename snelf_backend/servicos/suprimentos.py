@@ -29,3 +29,9 @@ class SuprimentosServico():
             return self.repositorio.inserir_suprimentos(inputArray)
         except Exception as erro:
             raise erro
+        
+    def consultar_pela_descricao(self, busca, offset, limit):
+        try:
+            return self.repositorio.consultar_pela_descricao(busca, offset, limit)
+        except Exception as erro:
+            raise erro

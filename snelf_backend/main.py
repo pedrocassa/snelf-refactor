@@ -7,6 +7,7 @@ from pre_processamento import inicia_pre_processamento
 from servicos.fasttext import ManipuladorFasttext
 from servicos.medicamentos import MedicamentosServico
 from servicos.suprimentos import SuprimentosServico
+from fastapi.middleware.cors import CORSMiddleware
 import fasttext
 import os
 from http import HTTPStatus
@@ -23,8 +24,8 @@ O post abaixo é usado para iniciar ou retormar o treinamento
 - forceRestart: Indica se o treinamento deve ser reiniciado do zero (True) ou continuar de onde parou (False).
 - csv_file: Arquivo a ser enviado para gerar o modelo, se não existir, usará o que está em /dados
 """
-@app.post("/treinar-modelo")
-async def treinar_modelo(csv_file: Optional[UploadFile] = File(None), forceRestart = False):
+@app.post("/treinamento/treinar-modelo")
+async def treinar_modelo(csv_file: Optional[UploadFile] = File(None), force_restart = False):
     try:
         if csv_file is not None:
             manipulador_de_arquivos = ManipuladorDeArquivos()
@@ -50,7 +51,7 @@ async def treinar_modelo(csv_file: Optional[UploadFile] = File(None), forceResta
     except Exception as erro:
         raise HTTPException(status_code=500, detail='Ocorreu um erro ao tentar iniciar o treinamento')
 
-@app.post("/parar-treinamento")
+@app.get("/treinamento/parar-treinamento")
 async def parar_treinamento():
     try:
         manipulador_fasttext = ManipuladorFasttext()
@@ -59,7 +60,7 @@ async def parar_treinamento():
     except Exception as erro:
         return HTTPException(detail='Ocorreu um erro ao tentar parar o treinamento', status_code=500)
 
-@app.get("/obter-status-treinamento")
+@app.get("/treinamento/obter-status-treinamento")
 async def obter_status_treinamento():
     treinamento = Treinamento()
     try:
@@ -72,7 +73,7 @@ async def obter_status_treinamento():
         return HTTPException(detail='Ocorreu um erro ao tentar obter o status do treinamento', status_code=500)
 
 
-@app.post("/importar-csv-medicamentos")
+@app.post("/medicamentos/importar-csv-medicamentos")
 async def importar_csv_medicamentos(csvFile: UploadFile = File(None)):
     try:
         servico_medicamentos = MedicamentosServico()
@@ -82,7 +83,7 @@ async def importar_csv_medicamentos(csvFile: UploadFile = File(None)):
     except Exception as erro:
         raise HTTPException(status_code=500, detail='Ocorreu um erro ao tentar importar o CSV de medicamentos')
 
-@app.post("/importar-csv-suprimentos")
+@app.post("/suprimentos/importar-csv-suprimentos")
 async def importar_csv_suprimentos(csvFile: UploadFile = File(None)):
     try:
         servico_suprimentos = SuprimentosServico()
@@ -92,7 +93,7 @@ async def importar_csv_suprimentos(csvFile: UploadFile = File(None)):
     except Exception as erro:
         raise HTTPException(status_code=500, detail='Ocorreu um erro ao tentar importar o CSV de medicamentos')
     
-@app.get("/consultar-grupo")
+@app.get("/medicamentos/consultar-grupo")
 async def consultar_grupo(
     busca: str = Query(..., description="Termo de busca"),
     offset: int = Query(0, description="Deslocamento para paginação"),
@@ -113,7 +114,7 @@ async def consultar_grupo(
     except Exception as erro:
         raise HTTPException(status_code=500, detail='Ocorreu um erro ao tentar consultar o grupo de medicamentos')
     
-@app.get("/consultar-clean")
+@app.get("/medicamentos/consultar-clean")
 async def consultar_clean(
     busca: str = Query(..., description="Termo de busca"),
     offset: int = Query(0, description="Deslocamento para paginação"),
@@ -133,22 +134,28 @@ async def consultar_descricao(
     limit: int = Query(10, description="Limite de resultados por página")
 ):
     try:
-        servico_medicamentos = MedicamentosServico()
-        medicamentos = servico_medicamentos.consultar_transacoes_pela_descricao(busca, offset, limit)
-        return { 'medicamentos': medicamentos }
+        servico_suprimentos = SuprimentosServico()
+        suprimentos = servico_suprimentos.consultar_pela_descricao(busca, offset, limit)
+        return { 'suprimentos': suprimentos }
     except Exception as erro:
         raise HTTPException(status_code=500, detail='Ocorreu um erro ao tentar consultar a descrição dos medicamentos')
 
 @app.get("/obter-colunas")
-def consultar_colunas(tipo: str = Query(..., description="medicamentos ou suprimentos")):
+def consultar_colunas():
     try:
-        match tipo:
-            case 'medicamentos':
-                return { 'colunas': ['clean', 'label', 'descricao', 'grupo'] }
-            case 'suprimentos':
-                return { 'colunas': ['uf', 'nomeuasg', 'ano', 'descricao', 'quantidade', 'valor_unitario_homologado', 'valor_total_homologado'] }
-            case _:
-                raise HTTPException(status_code=400, detail='Tipo inválido')
+        return {
+            'suprimentos': { 'colunas': ['clean', 'label', 'descricao', 'grupo'] },
+            'medicamentos': ['uf', 'nomeuasg', 'ano', 'descricao', 'quantidade', 'valor_unitario_homologado', 'valor_total_homologado']
+        }
     except Exception as erro:
         raise HTTPException(status_code=500, detail='Ocorreu um erro ao tentar obter as colunas')
     
+
+
+app = CORSMiddleware(
+    app=app,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
