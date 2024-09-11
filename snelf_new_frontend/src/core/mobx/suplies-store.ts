@@ -1,4 +1,4 @@
-import { makeObservable, observable, action, runInAction } from "mobx"
+import { makeObservable, observable, action, runInAction } from "mobx";
 import { SuppliesService } from "../services/supplies.service";
 
 class SuppliesStore {
@@ -14,16 +14,23 @@ class SuppliesStore {
 
     constructor() {
         makeObservable(this, {
+            rows: observable,
+            columns: observable,
             error: observable,
             isLoading: observable,
             status: observable,
-            setError: action,
             limit: observable,
             offset: observable,
             search: observable,
+            setError: action,
             setLoading: action,
             setStatus: action,
-        })
+            setRows: action,
+            setColumns: action,
+            setSearch: action,
+            setOffset: action,
+            setLimit: action,
+        });
 
         this.baseService = new SuppliesService();
     }
@@ -42,11 +49,11 @@ class SuppliesStore {
 
     setRows = (rows: string[][]) => {
         this.rows = rows;
-    }
+    };
 
     setColumns = (nextColumns: string[]) => {
         this.columns = nextColumns;
-    }
+    };
 
     setSearch = (search: string) => {
         this.search = search;
@@ -61,11 +68,12 @@ class SuppliesStore {
     };
 
     loadTableRows = async (search: string, offset: number, limit: number) => {
+        this.setLoading(true);
         try {
             const response = await this.baseService.getSupplies(search, offset, limit);
             runInAction(() => {
-                this.setRows(response.data.suprimentos);
-            })
+                this.setRows(response.suprimentos);
+            });
         } catch (error) {
             runInAction(() => {
                 this.setError("Erro ao carregar os dados da tabela.");
@@ -75,8 +83,7 @@ class SuppliesStore {
                 this.setLoading(false);
             });
         }
-
-    }
+    };
 
     importSuppliesCsv = async (csvFile?: File) => {
         this.setLoading(true);
@@ -96,7 +103,6 @@ class SuppliesStore {
             });
         }
     };
-
 }
 
 export const suppliesStore = new SuppliesStore();

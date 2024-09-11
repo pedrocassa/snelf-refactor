@@ -110,17 +110,13 @@ class MedicamentosServico():
             return []
 
         transacoes = [
-            {
-                'id': transacao[0],
-                'CodigoNFe': transacao[1],
-                'DataEmissao': transacao[2],
-                'MunicipioEmitente': transacao[3],
-                'unidadecomercial': transacao[4],
-                'quantidadecomercial': transacao[5],
-                'valorunitariocomercial': transacao[6],
-                'DescricaoProduto': transacao[7],
-                'CLEAN': transacao[8]
-            }
+            [
+                transacao[0],
+                transacao[1],
+                transacao[2],
+                transacao[3],
+                transacao[4],
+            ]
             for transacao in transacoes_db            
         ]
         return transacoes
@@ -150,17 +146,13 @@ class MedicamentosServico():
         medicamentos_db = self.repositorio.consultar_medicamentos_pelo_clean(clean=busca, offset=offset, limit=limit)
         
         medicamentos = [
-            {
-                'id': medicamento[0],
-                'CodigoNFe': medicamento[1],
-                'DataEmissao': medicamento[2],
-                'MunicipioEmitente': medicamento[3],
-                'unidadecomercial': medicamento[4],
-                'quantidadecomercial': medicamento[5],
-                'valorunitariocomercial': medicamento[6],
-                'DescricaoProduto': medicamento[7],
-                'CLEAN': medicamento[8]
-            }
+            [
+                medicamento[0],
+                medicamento[1],
+                medicamento[2],
+                medicamento[3],
+                medicamento[4],
+            ]
             for medicamento in medicamentos_db
         ]
         

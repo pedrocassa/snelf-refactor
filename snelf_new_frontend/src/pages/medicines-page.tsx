@@ -5,8 +5,6 @@ import { observer } from 'mobx-react-lite';
 import { TableComponent } from '../components/table';
 import { SearchType } from '../types/enums';
 
-
-
 export const MedicinesPage = observer(() => {
   const { medicinesStore } = useStore()
   const filters: SearchType[] = [SearchType.CLEAN, SearchType.GROUP]
@@ -19,6 +17,8 @@ export const MedicinesPage = observer(() => {
     setLimit,
     loadTableRows,
   } = medicinesStore || {};
+
+  console.log(rows)
 
   return (
     <Grid container justifyContent={"center"} gap={2} marginY={10}>

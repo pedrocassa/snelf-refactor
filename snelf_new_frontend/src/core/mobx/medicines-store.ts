@@ -1,4 +1,4 @@
-import { makeObservable, observable, action, runInAction } from "mobx"
+import { makeObservable, observable, action, runInAction } from "mobx";
 import { SearchType } from "../../types/enums";
 import { MedicinesService } from "../../core/services/medicines.service";
 
@@ -10,22 +10,27 @@ class MedicinesStore {
     offset: number = 0;
     status: string | null = null;
     columns: string[] = [];
-    private baseService: MedicinesService
+    private baseService: MedicinesService;
 
     constructor() {
         makeObservable(this, {
-            error: observable,
+            rows: observable,
             isLoading: observable,
-            columns: observable,
-            status: observable,
-            offset: observable,
+            error: observable,
             limit: observable,
+            offset: observable,
+            status: observable,
+            columns: observable,
             setError: action,
             setLoading: action,
             setStatus: action,
+            setRows: action,
+            setColumns: action,
+            setOffset: action,
+            setLimit: action,
             loadTableRows: action,
             importMedicinesCsv: action,
-        })
+        });
 
         this.baseService = new MedicinesService();
     }
@@ -44,11 +49,11 @@ class MedicinesStore {
 
     setRows = (rows: string[][]) => {
         this.rows = rows;
-    }
+    };
 
     setColumns = (nextColumns: string[]) => {
         this.columns = nextColumns;
-    }
+    };
 
     setOffset = (offset: number) => {
         this.offset = offset;
@@ -58,21 +63,22 @@ class MedicinesStore {
         this.limit = limit;
     };
 
-    async loadTableRows(searchType: SearchType, search: string, offset: number, limit: number) {
+    loadTableRows = async (searchType: SearchType, search: string, offset: number, limit: number) => {
         this.setLoading(true);
         this.setError(null);
-        let response = null
+        let response: any = null;
         try {
             switch (searchType) {
                 case SearchType.CLEAN:
                     response = await this.baseService.consultByClean(search, offset, limit);
-                    this.setRows(response.data);
                     break;
                 case SearchType.GROUP:
                     response = await this.baseService.consultByGroup(search, offset, limit);
-                    this.setRows(response.data);
                     break;
             }
+            runInAction(() => {
+                this.setRows(response.medicamentos);
+            });
         } catch (error) {
             runInAction(() => {
                 this.setError("Erro ao carregar os dados da tabela.");
@@ -82,13 +88,11 @@ class MedicinesStore {
                 this.setLoading(false);
             });
         }
-
-    }
+    };
 
     importMedicinesCsv = async (csvFile?: File) => {
         this.setLoading(true);
         this.setError(null);
-
         try {
             await this.baseService.importMedicines(csvFile);
             runInAction(() => {
@@ -104,6 +108,6 @@ class MedicinesStore {
             });
         }
     };
-
 }
+
 export const medicinesStore = new MedicinesStore();

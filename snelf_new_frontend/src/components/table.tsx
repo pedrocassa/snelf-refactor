@@ -13,6 +13,7 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import { TableHead } from "@mui/material";
+import { observer } from 'mobx-react-lite';
 
 interface TablePaginationActionsProps {
   count: number;
@@ -75,7 +76,7 @@ interface TableProps {
   onRowsPerPageChange: (newLimit: number) => void;
 }
 
-export const TableComponent = ({
+export const TableComponent = observer(({
   rows,
   columns,
   offset,
@@ -84,7 +85,6 @@ export const TableComponent = ({
   onRowsPerPageChange,
 }: TableProps) => {
   const page = Math.floor(offset / limit);
-
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     onPageChange(newPage * limit);
   };
@@ -101,7 +101,7 @@ export const TableComponent = ({
         <TableHead>
           <TableRow>
             {columns.map((column) => (
-              <TableCell key={column}>{column}</TableCell>
+              <TableCell key={column} width={10}>{column}</TableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -139,4 +139,4 @@ export const TableComponent = ({
       </Table>
     </TableContainer>
   );
-};
+})

@@ -12,7 +12,13 @@ class SuprimentosDao(BaseDAO):
         return self.insert(query, valores)
     
     def consultar_pela_descricao(self, busca, offset, limit):
-        query = f""" SELECT * 
+        query = f""" SELECT uf, 
+                            nomeuasg, 
+                            ano, 
+                            descricao, 
+                            quantidade, 
+                            valor_unitario_homologado, 
+                            valor_total_homologado
                     FROM suprimentos 
                     WHERE LOWER(descricao) LIKE LOWER('%{busca}%')
                     LIMIT {limit}

@@ -26,7 +26,7 @@ export class MedicinesService {
     async consultByGroup(group: string, offset: number, limit: number) {
         try {
             const response = await this.axiosInstace.get(
-                `/medicamentos/consultar-grupo?busca=${group}&offset=${offset}&limit=${limit}`
+                `/consultar-grupo?busca=${group}&offset=${offset}&limit=${limit}`
             )
             return response.data
         } catch (error) {
@@ -37,7 +37,7 @@ export class MedicinesService {
     async consultByClean(clean: string, offset: number, limit: number) {
         try {
             const response = await this.axiosInstace.get(
-                `/medicamentos/consultar-clean?busca=${clean}&offset=${offset}&limit=${limit}`
+                `/consultar-clean?busca=${clean}&offset=${offset}&limit=${limit}`
             )
             return response.data
         } catch (error) {

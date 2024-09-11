@@ -50,7 +50,8 @@ class BaseStore {
         this.setError(null);
         try {
             const response = await this.baseService.getColumns();
-            const { suprimentos, medicamentos } = response.data.colunas
+            const { suprimentos, medicamentos } = response.data
+            console.log(suprimentos, medicamentos)
             suppliesStore.setColumns(suprimentos);
             medicinesStore.setColumns(medicamentos);
         } catch (error) {

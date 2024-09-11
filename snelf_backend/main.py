@@ -144,8 +144,8 @@ async def consultar_descricao(
 def consultar_colunas():
     try:
         return {
-            'suprimentos': { 'colunas': ['clean', 'label', 'descricao', 'grupo'] },
-            'medicamentos': ['uf', 'nomeuasg', 'ano', 'descricao', 'quantidade', 'valor_unitario_homologado', 'valor_total_homologado']
+            'medicamentos':  ['Clean','Descricao', 'Grupo', 'Quantidade', 'Valor Unitário'],
+            'suprimentos': ['UF', 'Nome', 'Ano', 'Descrição', 'Quantidade', 'Valor Unitário', 'Valor Total']
         }
     except Exception as erro:
         raise HTTPException(status_code=500, detail='Ocorreu um erro ao tentar obter as colunas')

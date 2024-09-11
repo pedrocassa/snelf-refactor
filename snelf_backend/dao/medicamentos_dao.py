@@ -75,15 +75,11 @@ class MedicamentosDAO(BaseDAO):
     def consultar_transacoes_pela_descricao(self, busca, offset, limit):
         query = f"""
                 SELECT 
-                    id, 
-                    CodigoNFe, 
-                    DataEmissao, 
-                    MunicipioEmitente, 
-                    unidadecomercial, 
-                    quantidadecomercial, 
-                    valorunitariocomercial, 
+                    CLEAN, 
                     DescricaoProduto, 
-                    CLEAN
+                    unidadecomercial,
+                    quantidadecomercial,
+                    valorunitariocomercial
                 FROM transactions t 
                 WHERE LOWER(t.descricaoproduto) LIKE LOWER('%{busca}%')
                 LIMIT {limit}
@@ -108,15 +104,11 @@ class MedicamentosDAO(BaseDAO):
     
     def consultar_medicamentos_pelo_clean(self, clean, offset, limit):
         query = f"""SELECT 
-                        id, 
-                        CodigoNFe, 
-                        DataEmissao, 
-                        MunicipioEmitente, 
-                        unidadecomercial, 
-                        quantidadecomercial, 
-                        valorunitariocomercial, 
+                        CLEAN, 
                         DescricaoProduto, 
-                        CLEAN
+                        unidadecomercial,
+                        quantidadecomercial,
+                        valorunitariocomercial
                     FROM transactions t
                     WHERE LOWER(t.clean) LIKE LOWER('%{clean}%')
                     LIMIT {limit}

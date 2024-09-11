@@ -31,9 +31,9 @@ export const Form = observer(({ loadTableRows, filters, limit, offset }: FormPro
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         // mudar isso ja to louco da cabeça
-        const searchType = [SearchType.CLEAN, SearchType.GROUP].includes(data.filter as SearchType) 
+        const searchType = [SearchType.CLEAN, SearchType.GROUP].includes(data.filter as SearchType)
         if (searchType) {
-            return loadTableRows(data.filter as SearchType, data.field, limit, offset);
+            return loadTableRows(data.filter as SearchType, data.field, offset, limit);
         }
         return loadTableRows(data.field, offset, limit)
     }
